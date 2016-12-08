@@ -1,0 +1,30 @@
+{
+  "name": "polymer2",
+  "authors": [
+    "Steven Altsman <steven.altsman@gmail.com>"
+  ],
+  "description": "Place for AWS polymer download",
+  "main": "",
+  "moduleType": [
+    "es6"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "custom-elements": "webcomponents/custom-elements#master",
+    "google-chart": "~1.1.1",
+    "google-sheets": "~1.0.6",
+    "polymer": "Polymer/polymer#2.0-preview",
+    "shadycss": "webcomponents/shadycss#master",
+    "shadydom": "webcomponents/shadydom#master",
+    "iron-signals": "~1.0.3"
+  }
+}
