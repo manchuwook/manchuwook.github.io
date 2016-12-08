@@ -1,18 +1,24 @@
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
     <script src="/bower_components/webcomponentsjs/webcomponents.min.js"></script>
     <link rel="import" href="/bower_components/iron-signals/iron-signals.html"/>
     <link rel="import" href="/bower_components/iron-ajax/iron-ajax.html"/>
     <link rel="import" href="/bower_components/google-sheets/google-sheets.html"/>
   </head>
   <body>This is that thing that does the stuff</body>
-  <google-sheets
-                 id="sheet"
-                 key="0Anye-JMjUkZZdDBkMVluMEhZMmFGeHpYdDJJV1FBRWc"
-                 tab-id="1"
-                 published
-                 rows="{{rows}}"
-                 tab="{{tab}}"
-                 open-in-google-docs-url="{{openInGoogleDocsUrl}}">
-  </google-sheets>
+  <dom-bind>
+    <google-sheets
+                   id="sheet"
+                   key="0Anye-JMjUkZZdDBkMVluMEhZMmFGeHpYdDJJV1FBRWc"
+                   tab-id="1"
+                   published
+                   rows="{{rows}}"
+                   tab="{{tab}}"
+                   open-in-google-docs-url="{{openInGoogleDocsUrl}}">
+    </google-sheets>
+    <dom-repeat items="[[rows]]">
+      Row your boat
+    </dom-repeat>
+  </dom-bind>
 </html>
