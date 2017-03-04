@@ -40,77 +40,89 @@
  var head = document.getElementsByTagName(&apos;head&apos;)[0];
  head.appendChild(script);
 
-	function rollDice() {
-		// Fancy RPG dice roller
-		var diceRoller = new DiceRoller();
+function openRoller(dice) {
+	// Get a reference to the dice tower
+	var diceTower = document.querySelector(&apos;#dice-tower&apos;);
 
-		// Shadowrun&apos;s dicetype is always d6
-		var diceType = &apos;d6&apos;;
+	// Get a reference to the base dice
+	var diceAmount = diceTower.querySelector(&apos;#dice&apos;);
+	diceAmount.innerHTML = dice;
 
-		// Fetch the base dice value
-		var baseDice = parseFloat(document.querySelector(&quot;#dice&quot;).innerHTML || 0);
-		// Fetch the bonus dice value
-		var bonus = parseFloat(document.querySelector(&quot;#bonus-dice&quot;).value || 0);
+	// Set the tower back to visible
+	diceTower.style.display = &apos;block&apos;;
+}
 
-		// Fetch the penalty dice value
-		var penalty = parseFloat(document.querySelector(&quot;#penalty-dice&quot;).value || 0);
+function rollDice() {
+	// Fancy RPG dice roller
+	var diceRoller = new DiceRoller();
 
-		// Fetch the bonus dice value
-		var preEdge = document.querySelector(&quot;#isPre&quot;).checked || false;
+	// Shadowrun&apos;s dicetype is always d6
+	var diceType = &apos;d6&apos;;
 
-		// If edge was burned, edge dice are added, 6&apos;s append another die, rolling more for each 6
-		if (preEdge) {
-			bonus += parseFloat(document.querySelector(&quot;#edge-dice&quot;).value || 0);
-			diceType += &apos;!&apos;;
-		}
+	// Fetch the base dice value
+	var baseDice = parseFloat(document.querySelector(&quot;#dice&quot;).innerHTML || 0);
+	// Fetch the bonus dice value
+	var bonus = parseFloat(document.querySelector(&quot;#bonus-dice&quot;).value || 0);
 
-		// Roll those dice
-		diceRoller.roll((baseDice + bonus - penalty) + diceType);
+	// Fetch the penalty dice value
+	var penalty = parseFloat(document.querySelector(&quot;#penalty-dice&quot;).value || 0);
 
-		// Store it in a temp variable
-		var latestRoll = diceRoller.getLog().shift();
+	// Fetch the bonus dice value
+	var preEdge = document.querySelector(&quot;#isPre&quot;).checked || false;
 
-		// Get the console window
-		var dr = document.querySelector(&quot;#dice-results&quot;);
-
-		// Only one item in the array
-		var rolled = latestRoll.rolls[0];
-
-		// Classify the dice as:
-		// - explodable (6s)
-		var explodable = rolled.reduce((total,x)=&gt;{ return x == 6 ? total + 1 : total }, 0);
-
-		// - hit (5 or 6)
-		var hits = rolled.reduce((total,x)=&gt;{ return x &gt;= 5 ? total + 1 : total }, 0);
-
-		// - miss (1-4)
-		var misses = rolled.reduce((total,x)=&gt;{ return x &lt; 5 ? total + 1 : total }, 0);
-
-		// - possible glitch (1)
-		var glitched = rolled.reduce((total,x)=&gt;{ return x == 1 ? total + 1 : total }, 0);
-
-		// Classify the total results as
-		// - some successes (1+ dice &gt;= 5)
-
-		// - confirmed glitch (base dice / 2 in 1s)
-		var glitchmsg = &quot;&quot;;
-		if (glitched == Math.ceil(baseDice / 2)) { glitchmsg = &quot;, &lt;b&gt;GLITCHED!&lt;/b&gt;&quot;; }
-
-		// - critical glitch (confirmed glitch + no hits)
-		if (glitched == Math.ceil(baseDice / 2) &amp;&amp; hits == 0) { glitchmsg = &quot;, &lt;b&gt;CRITICAL GLITCH!&lt;/b&gt;&quot;; }
-
-		// Spit out the results
-		var results = &apos;&lt;div class=&quot;grid-40&quot;&gt;&apos; + rolled + &apos;&lt;/div&gt;&apos;;
-		// Add individual dice stats
-		results += &apos;&lt;div class=&quot;grid-40&quot;&gt;&apos;;
-		results += hits + &apos; hits, &apos;;
-		results += misses + &apos; failures&apos;;
-		results += glitchmsg;
-		results += &apos;&lt;/div&gt;&apos;;
-		// Show the reroll link
-		results += &apos;&lt;div class=&quot;grid-20 reroll&quot;&gt;(&lt;a href=&quot;#&quot;&gt;Reroll&lt;/a&gt;)&lt;/div&gt;&apos;;
-		dr.innerHTML += results;
+	// If edge was burned, edge dice are added, 6&apos;s append another die, rolling more for each 6
+	if (preEdge) {
+		bonus += parseFloat(document.querySelector(&quot;#edge-dice&quot;).value || 0);
+		diceType += &apos;!&apos;;
 	}
+
+	// Roll those dice
+	diceRoller.roll((baseDice + bonus - penalty) + diceType);
+
+	// Store it in a temp variable
+	var latestRoll = diceRoller.getLog().shift();
+
+	// Get the console window
+	var dr = document.querySelector(&quot;#dice-results&quot;);
+
+	// Only one item in the array
+	var rolled = latestRoll.rolls[0];
+
+	// Classify the dice as:
+	// - explodable (6s)
+	var explodable = rolled.reduce((total,x)=&gt;{ return x == 6 ? total + 1 : total }, 0);
+
+	// - hit (5 or 6)
+	var hits = rolled.reduce((total,x)=&gt;{ return x &gt;= 5 ? total + 1 : total }, 0);
+
+	// - miss (1-4)
+	var misses = rolled.reduce((total,x)=&gt;{ return x &lt; 5 ? total + 1 : total }, 0);
+
+	// - possible glitch (1)
+	var glitched = rolled.reduce((total,x)=&gt;{ return x == 1 ? total + 1 : total }, 0);
+
+	// Classify the total results as
+	// - some successes (1+ dice &gt;= 5)
+
+	// - confirmed glitch (base dice / 2 in 1s)
+	var glitchmsg = &quot;&quot;;
+	if (glitched == Math.ceil(baseDice / 2)) { glitchmsg = &quot;, &lt;b&gt;GLITCHED!&lt;/b&gt;&quot;; }
+
+	// - critical glitch (confirmed glitch + no hits)
+	if (glitched == Math.ceil(baseDice / 2) &amp;&amp; hits == 0) { glitchmsg = &quot;, &lt;b&gt;CRITICAL GLITCH!&lt;/b&gt;&quot;; }
+
+	// Spit out the results
+	var results = &apos;&lt;div class=&quot;grid-40&quot;&gt;&apos; + rolled + &apos;&lt;/div&gt;&apos;;
+	// Add individual dice stats
+	results += &apos;&lt;div class=&quot;grid-40&quot;&gt;&apos;;
+	results += hits + &apos; hits, &apos;;
+	results += misses + &apos; failures&apos;;
+	results += glitchmsg;
+	results += &apos;&lt;/div&gt;&apos;;
+	// Show the reroll link
+	results += &apos;&lt;div class=&quot;grid-20 reroll&quot;&gt;(&lt;a href=&quot;#&quot;&gt;Reroll&lt;/a&gt;)&lt;/div&gt;&apos;;
+	dr.innerHTML += results;
+}
 //</xsl:comment>
 				</script>
 				<style type="text/css">@page { margin-left:0.60in; margin-right:0.60in; margin-top:0.79in; margin-bottom:0.79in } @media print { br.altova-page-break { page-break-before: always; } }</style>
@@ -274,6 +286,9 @@
 																</span>
 															</td>
 															<td valign="top">
+																<span>
+																	<xsl:text>[</xsl:text>
+																</span>
 																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Electronic Warfare&apos;]/@modified)">
 																	<xsl:choose>
 																		<xsl:when test=". instance of element() or . instance of document-node()">
@@ -284,6 +299,9 @@
 																		</xsl:otherwise>
 																	</xsl:choose>
 																</xsl:for-each>
+																<span>
+																	<xsl:text>d6]</xsl:text>
+																</span>
 															</td>
 														</tr>
 														<tr>
@@ -387,6 +405,9 @@
 																</span>
 															</td>
 															<td valign="top">
+																<span>
+																	<xsl:text>[</xsl:text>
+																</span>
 																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Willpower&apos;]/@modified | skills/active/skill[@name=&apos;Hardware&apos;]/@modified)">
 																	<xsl:choose>
 																		<xsl:when test=". instance of element() or . instance of document-node()">
@@ -397,6 +418,9 @@
 																		</xsl:otherwise>
 																	</xsl:choose>
 																</xsl:for-each>
+																<span>
+																	<xsl:text>d6]</xsl:text>
+																</span>
 															</td>
 														</tr>
 														<tr>
@@ -594,6 +618,9 @@
 																</span>
 															</td>
 															<td valign="top">
+																<span>
+																	<xsl:text>[</xsl:text>
+																</span>
 																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Computer&apos;]/@modified)">
 																	<xsl:choose>
 																		<xsl:when test=". instance of element() or . instance of document-node()">
@@ -604,6 +631,9 @@
 																		</xsl:otherwise>
 																	</xsl:choose>
 																</xsl:for-each>
+																<span>
+																	<xsl:text>d6]</xsl:text>
+																</span>
 															</td>
 														</tr>
 														<tr bgcolor="#e1e1e1">
@@ -706,6 +736,9 @@
 																</span>
 															</td>
 															<td valign="top">
+																<span>
+																	<xsl:text>[</xsl:text>
+																</span>
 																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Computer&apos;]/@modified)">
 																	<xsl:choose>
 																		<xsl:when test=". instance of element() or . instance of document-node()">
@@ -716,6 +749,9 @@
 																		</xsl:otherwise>
 																	</xsl:choose>
 																</xsl:for-each>
+																<span>
+																	<xsl:text>d6]</xsl:text>
+																</span>
 															</td>
 														</tr>
 														<tr>
@@ -818,6 +854,9 @@
 																</span>
 															</td>
 															<td valign="top">
+																<span>
+																	<xsl:text>[</xsl:text>
+																</span>
 																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Intuition&apos;]/@modified | skills/active/skill[@name=&apos;Hacking&apos;]/@modified)">
 																	<xsl:choose>
 																		<xsl:when test=". instance of element() or . instance of document-node()">
@@ -828,6 +867,9 @@
 																		</xsl:otherwise>
 																	</xsl:choose>
 																</xsl:for-each>
+																<span>
+																	<xsl:text>d6]</xsl:text>
+																</span>
 															</td>
 														</tr>
 														<tr bgcolor="#e1e1e1">
@@ -930,6 +972,9 @@
 																</span>
 															</td>
 															<td valign="top">
+																<span>
+																	<xsl:text>[</xsl:text>
+																</span>
 																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Software&apos;]/@modified)">
 																	<xsl:choose>
 																		<xsl:when test=". instance of element() or . instance of document-node()">
@@ -940,6 +985,9 @@
 																		</xsl:otherwise>
 																	</xsl:choose>
 																</xsl:for-each>
+																<span>
+																	<xsl:text>d6]</xsl:text>
+																</span>
 															</td>
 														</tr>
 														<tr>
@@ -1042,6 +1090,9 @@
 																</span>
 															</td>
 															<td valign="top">
+																<span>
+																	<xsl:text>[</xsl:text>
+																</span>
 																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Hacking&apos;]/@modified)">
 																	<xsl:choose>
 																		<xsl:when test=". instance of element() or . instance of document-node()">
@@ -1052,6 +1103,9 @@
 																		</xsl:otherwise>
 																	</xsl:choose>
 																</xsl:for-each>
+																<span>
+																	<xsl:text>d6]</xsl:text>
+																</span>
 															</td>
 														</tr>
 														<tr bgcolor="#e1e1e1">
@@ -1121,6 +1175,9 @@
 																</span>
 															</td>
 															<td valign="top">
+																<span>
+																	<xsl:text>[</xsl:text>
+																</span>
 																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Intuition&apos;]/@modified | skills/active/skill[@name=&apos;Software&apos;]/@modified)">
 																	<xsl:choose>
 																		<xsl:when test=". instance of element() or . instance of document-node()">
@@ -1131,6 +1188,9 @@
 																		</xsl:otherwise>
 																	</xsl:choose>
 																</xsl:for-each>
+																<span>
+																	<xsl:text>d6]</xsl:text>
+																</span>
 															</td>
 														</tr>
 														<tr>
@@ -1200,6 +1260,9 @@
 																</span>
 															</td>
 															<td valign="top">
+																<span>
+																	<xsl:text>[</xsl:text>
+																</span>
 																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Computer&apos;]/@modified)">
 																	<xsl:choose>
 																		<xsl:when test=". instance of element() or . instance of document-node()">
@@ -1210,6 +1273,9 @@
 																		</xsl:otherwise>
 																	</xsl:choose>
 																</xsl:for-each>
+																<span>
+																	<xsl:text>d6]</xsl:text>
+																</span>
 															</td>
 														</tr>
 														<tr bgcolor="#e1e1e1">
@@ -1312,6 +1378,9 @@
 																</span>
 															</td>
 															<td valign="top">
+																<span>
+																	<xsl:text>[</xsl:text>
+																</span>
 																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Software&apos;]/@modified)">
 																	<xsl:choose>
 																		<xsl:when test=". instance of element() or . instance of document-node()">
@@ -1322,6 +1391,9 @@
 																		</xsl:otherwise>
 																	</xsl:choose>
 																</xsl:for-each>
+																<span>
+																	<xsl:text>d6]</xsl:text>
+																</span>
 															</td>
 														</tr>
 														<tr>
@@ -1391,6 +1463,9 @@
 																</span>
 															</td>
 															<td valign="top">
+																<span>
+																	<xsl:text>[</xsl:text>
+																</span>
 																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Intuition&apos;]/@modified | skills/active/skill[@name=&apos;Computer&apos;]/@modified)">
 																	<xsl:choose>
 																		<xsl:when test=". instance of element() or . instance of document-node()">
@@ -1401,6 +1476,9 @@
 																		</xsl:otherwise>
 																	</xsl:choose>
 																</xsl:for-each>
+																<span>
+																	<xsl:text>d6]</xsl:text>
+																</span>
 															</td>
 														</tr>
 														<tr bgcolor="#e1e1e1">
@@ -1503,6 +1581,9 @@
 																</span>
 															</td>
 															<td valign="top">
+																<span>
+																	<xsl:text>[</xsl:text>
+																</span>
 																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Intuition&apos;]/@modified | skills/active/skill[@name=&apos;Electronic Warfare&apos;]/@modified)">
 																	<xsl:choose>
 																		<xsl:when test=". instance of element() or . instance of document-node()">
@@ -1513,6 +1594,9 @@
 																		</xsl:otherwise>
 																	</xsl:choose>
 																</xsl:for-each>
+																<span>
+																	<xsl:text>d6]</xsl:text>
+																</span>
 															</td>
 														</tr>
 														<tr>
@@ -1615,6 +1699,9 @@
 																</span>
 															</td>
 															<td valign="top">
+																<span>
+																	<xsl:text>[</xsl:text>
+																</span>
 																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Intuition&apos;]/@modified | skills/active/skill[@name=&apos;Computer&apos;]/@modified)">
 																	<xsl:choose>
 																		<xsl:when test=". instance of element() or . instance of document-node()">
@@ -1625,6 +1712,9 @@
 																		</xsl:otherwise>
 																	</xsl:choose>
 																</xsl:for-each>
+																<span>
+																	<xsl:text>d6]</xsl:text>
+																</span>
 															</td>
 														</tr>
 														<tr bgcolor="#e1e1e1">
@@ -1727,6 +1817,9 @@
 																</span>
 															</td>
 															<td valign="top">
+																<span>
+																	<xsl:text>[</xsl:text>
+																</span>
 																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Cybercombat&apos;]/@modified)">
 																	<xsl:choose>
 																		<xsl:when test=". instance of element() or . instance of document-node()">
@@ -1737,6 +1830,9 @@
 																		</xsl:otherwise>
 																	</xsl:choose>
 																</xsl:for-each>
+																<span>
+																	<xsl:text>d6]</xsl:text>
+																</span>
 															</td>
 														</tr>
 														<tr>
@@ -1839,6 +1935,9 @@
 																</span>
 															</td>
 															<td valign="top">
+																<span>
+																	<xsl:text>[</xsl:text>
+																</span>
 																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Cybercombat&apos;]/@modified)">
 																	<xsl:choose>
 																		<xsl:when test=". instance of element() or . instance of document-node()">
@@ -1849,6 +1948,9 @@
 																		</xsl:otherwise>
 																	</xsl:choose>
 																</xsl:for-each>
+																<span>
+																	<xsl:text>d6]</xsl:text>
+																</span>
 															</td>
 														</tr>
 														<tr bgcolor="#e1e1e1">
@@ -1918,6 +2020,9 @@
 																</span>
 															</td>
 															<td valign="top">
+																<span>
+																	<xsl:text>[</xsl:text>
+																</span>
 																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Computer&apos;]/@modified)">
 																	<xsl:choose>
 																		<xsl:when test=". instance of element() or . instance of document-node()">
@@ -1928,6 +2033,9 @@
 																		</xsl:otherwise>
 																	</xsl:choose>
 																</xsl:for-each>
+																<span>
+																	<xsl:text>d6]</xsl:text>
+																</span>
 															</td>
 														</tr>
 														<tr>
@@ -2030,16 +2138,44 @@
 																</span>
 															</td>
 															<td valign="top">
-																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Hacking&apos;]/@modified)">
+																<a onclick="openRoller({sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Hacking&apos;]/@modified)})">
 																	<xsl:choose>
-																		<xsl:when test=". instance of element() or . instance of document-node()">
-																			<xsl:apply-templates/>
+																		<xsl:when test="not(string(&apos;#&apos;))">
+																			<xsl:attribute name="href">
+																				<xsl:text>#</xsl:text>
+																			</xsl:attribute>
+																		</xsl:when>
+																		<xsl:when test="substring(string(&apos;#&apos;), 1, 1) = '#'">
+																			<xsl:attribute name="href">
+																				<xsl:value-of select="&apos;#&apos;"/>
+																			</xsl:attribute>
 																		</xsl:when>
 																		<xsl:otherwise>
-																			<xsl:value-of select="."/>
+																			<xsl:attribute name="href">
+																				<xsl:if test="substring(string(&apos;#&apos;), 2, 1) = ':'">
+																					<xsl:text>file:///</xsl:text>
+																				</xsl:if>
+																				<xsl:value-of select="translate(string(&apos;#&apos;), '&#x5c;', '/')"/>
+																			</xsl:attribute>
 																		</xsl:otherwise>
 																	</xsl:choose>
-																</xsl:for-each>
+																	<span>
+																		<xsl:text>[</xsl:text>
+																	</span>
+																	<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Hacking&apos;]/@modified)">
+																		<xsl:choose>
+																			<xsl:when test=". instance of element() or . instance of document-node()">
+																				<xsl:apply-templates/>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<xsl:value-of select="."/>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																	<span>
+																		<xsl:text>d6]</xsl:text>
+																	</span>
+																</a>
 															</td>
 														</tr>
 														<tr bgcolor="#e1e1e1">
@@ -2138,6 +2274,9 @@
 																</span>
 															</td>
 															<td valign="top">
+																<span>
+																	<xsl:text>[</xsl:text>
+																</span>
 																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Hacking&apos;]/@modified)">
 																	<xsl:choose>
 																		<xsl:when test=". instance of element() or . instance of document-node()">
@@ -2148,6 +2287,9 @@
 																		</xsl:otherwise>
 																	</xsl:choose>
 																</xsl:for-each>
+																<span>
+																	<xsl:text>d6]</xsl:text>
+																</span>
 															</td>
 														</tr>
 														<tr>
@@ -2217,6 +2359,9 @@
 																</span>
 															</td>
 															<td valign="top">
+																<span>
+																	<xsl:text>[</xsl:text>
+																</span>
 																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Cybercombat&apos;]/@modified)">
 																	<xsl:choose>
 																		<xsl:when test=". instance of element() or . instance of document-node()">
@@ -2227,6 +2372,9 @@
 																		</xsl:otherwise>
 																	</xsl:choose>
 																</xsl:for-each>
+																<span>
+																	<xsl:text>d6]</xsl:text>
+																</span>
 															</td>
 														</tr>
 														<tr bgcolor="#e1e1e1">
@@ -2329,6 +2477,9 @@
 																</span>
 															</td>
 															<td valign="top">
+																<span>
+																	<xsl:text>[</xsl:text>
+																</span>
 																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Cybercombat&apos;]/@modified)">
 																	<xsl:choose>
 																		<xsl:when test=". instance of element() or . instance of document-node()">
@@ -2339,6 +2490,9 @@
 																		</xsl:otherwise>
 																	</xsl:choose>
 																</xsl:for-each>
+																<span>
+																	<xsl:text>d6]</xsl:text>
+																</span>
 															</td>
 														</tr>
 														<tr>
@@ -2509,6 +2663,9 @@
 																</span>
 															</td>
 															<td valign="top">
+																<span>
+																	<xsl:text>[</xsl:text>
+																</span>
 																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Intuition&apos;]/@modified | skills/active/skill[@name=&apos;Electronic Warfare&apos;]/@modified)">
 																	<xsl:choose>
 																		<xsl:when test=". instance of element() or . instance of document-node()">
@@ -2519,6 +2676,9 @@
 																		</xsl:otherwise>
 																	</xsl:choose>
 																</xsl:for-each>
+																<span>
+																	<xsl:text>d6]</xsl:text>
+																</span>
 															</td>
 														</tr>
 														<tr bgcolor="#e1e1e1">
@@ -2621,6 +2781,9 @@
 																</span>
 															</td>
 															<td valign="top">
+																<span>
+																	<xsl:text>[</xsl:text>
+																</span>
 																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Electronic Warfare&apos;]/@modified)">
 																	<xsl:choose>
 																		<xsl:when test=". instance of element() or . instance of document-node()">
@@ -2631,6 +2794,9 @@
 																		</xsl:otherwise>
 																	</xsl:choose>
 																</xsl:for-each>
+																<span>
+																	<xsl:text>d6]</xsl:text>
+																</span>
 															</td>
 														</tr>
 														<tr>
@@ -2696,6 +2862,9 @@
 																</span>
 															</td>
 															<td valign="top">
+																<span>
+																	<xsl:text>[</xsl:text>
+																</span>
 																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Electronic Warfare&apos;]/@modified)">
 																	<xsl:choose>
 																		<xsl:when test=". instance of element() or . instance of document-node()">
@@ -2706,6 +2875,9 @@
 																		</xsl:otherwise>
 																	</xsl:choose>
 																</xsl:for-each>
+																<span>
+																	<xsl:text>d6]</xsl:text>
+																</span>
 															</td>
 														</tr>
 														<tr bgcolor="#e1e1e1">
@@ -2967,13 +3139,7 @@
 					</xsl:element>
 				</xsl:element>
 				<br/>
-				<xsl:element name="div">
-					<xsl:attribute name="class">
-						<xsl:value-of select="'grid-container'"/>
-					</xsl:attribute>
-					<xsl:attribute name="id">
-						<xsl:value-of select="'dice-tower'"/>
-					</xsl:attribute>
+				<div style="display:none; " class="grid-container" id="dice-tower">
 					<xsl:element name="div">
 						<xsl:attribute name="class">
 							<xsl:value-of select="'grid-66 grid-parent'"/>
@@ -3032,7 +3198,7 @@
 								<xsl:text>Dice</xsl:text>
 							</span>
 						</xsl:element>
-						<div class="grid-50">
+						<div class="grid-50" id="dice">
 							<span id="dice">
 								<xsl:text>6</xsl:text>
 							</span>
@@ -3130,7 +3296,7 @@
 						<br/>
 					</xsl:element>
 					<br/>
-				</xsl:element>
+				</div>
 			</body>
 		</html>
 	</xsl:template>
