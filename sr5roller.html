@@ -1,0 +1,109 @@
+<html>
+    <head>
+        <style type="text/css"><!--@import url("tabs.css"); @import url("unsemantic-master/assets/stylesheets/unsemantic-grid-responsive-no-ie7.css");--></style>
+        <script src="dice-roller.js" lang="javascript"></script>
+        <script lang="javascript">
+            function rollDice() {
+                // Fancy RPG dice roller
+                var diceRoller = new DiceRoller();
+
+                // Shadowrun's dicetype is always d6
+                var diceType = 'd6';
+
+                // Fetch the base dice value
+                var baseDice = parseFloat(document.querySelector("#dice").innerHTML || 0);
+                // Fetch the bonus dice value
+                var bonus = parseFloat(document.querySelector("#bonus-dice").value || 0);
+
+                // Fetch the penalty dice value
+                var penalty = parseFloat(document.querySelector("#penalty-dice").value || 0);
+
+                // Fetch the bonus dice value
+                var preEdge = document.querySelector("#isPre").checked || false;
+
+                // If edge was burned, edge dice are added, 6's append another die, rolling more for each 6
+                if (preEdge) {
+					bonus += parseFloat(document.querySelector("#edge-dice").value || 0);
+					diceType += '!';
+				}
+
+                // Roll those dice
+                diceRoller.roll((baseDice + bonus - penalty) + diceType);
+
+                // Store it in a temp variable
+                var latestRoll = diceRoller.getLog().shift();
+
+                // Get the console window
+                var dr = document.querySelector("#dice-results");
+
+                // Only one item in the array
+                var rolled = latestRoll.rolls[0];
+
+                // Classify the dice as:
+                // - explodable (6s)
+                var explodable = rolled.reduce((total,x)=>{ return x == 6 ? total + 1 : total }, 0);
+
+                // - hit (5 or 6)
+                var hits = rolled.reduce((total,x)=>{ return x >= 5 ? total + 1 : total }, 0);
+
+                // - miss (1-4)
+                var misses = rolled.reduce((total,x)=>{ return x < 5 ? total + 1 : total }, 0);
+
+                // - possible glitch (1)
+                var glitched = rolled.reduce((total,x)=>{ return x == 1 ? total + 1 : total }, 0);
+
+                // Classify the total results as
+                // - some successes (1+ dice >= 5)
+
+                // - confirmed glitch (base dice / 2 in 1s)
+                var glitchmsg = "";
+                if (glitched == Math.ceil(baseDice / 2)) { glitchmsg = ", <b>GLITCHED!</b>"; }
+
+                // - critical glitch (confirmed glitch + no hits)
+                if (glitched == Math.ceil(baseDice / 2) && hits == 0) { glitchmsg = ", <b>CRITICAL GLITCH!</b>"; }
+
+                // Spit out the results
+                var results = '<div class="grid-40">' + rolled + '</div>';
+                // Add individual dice stats
+                results += '<div class="grid-40">';
+                results += hits + ' hits, ';
+                results += misses + ' failures';
+                results += glitchmsg;
+                results += '</div>';
+                // Show the reroll link
+                results += '<div class="grid-20 reroll">(<a href="#">Reroll</a>)</div>';
+                dr.innerHTML += results;
+            }
+        </script>
+    </head>
+    <body>
+        <div class="grid-container" id="dice-tower">
+            <div class="grid-66 grid-parent" id="dice-results">
+                <div class="grid-40">Dice Rolled</div>
+                <div class="grid-40">Dice Results</div>
+                <div class="grid-20 reroll">Reroll</div>
+            </div>
+            <div class="grid-33 grid-parent">
+                <div class="grid-100" id="action-name">Action Name</div>
+                <div class="grid-50">Dice</div>
+                <div class="grid-50" id="dice">6</div>
+                <div class="grid-50">Bonus Dice</div>
+                <div class="grid-50">
+                    <input type="text" id="bonus-dice">
+                </div>
+                <div class="grid-50">Penalty Dice</div>
+                <div class="grid-50">
+                    <input type="text" id="penalty-dice">
+                </div>
+                <div class="grid-50">Edge Roll (Pre)</div>
+                <div class="grid-25">
+                    <input type="checkbox" id="isPre">
+                </div>
+                <div class="grid-25">
+                    <input type="text" id="edge-dice">
+                </div>
+                <div class="grid-100" id="action-roll" onclick="rollDice(6,true)">Roll</div>
+            </div>
+        </div>
+    </body>
+</html>
