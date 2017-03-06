@@ -22,12 +22,11 @@ function openRoller(dice) {
 function closeTower() {
 	// Get a reference to the dice tower
 	var diceTower = document.querySelector('#dice-tower');
-
-	diceTower.style.display = 'hidden';
+	diceTower.style.display = 'none';
 
 	// Fetch a reference to the rolling area and clear it
-	var diceAmount = diceTower.querySelector('#dice');
-	diceAmount.innerHTML = '<div class="grid-40"><span>Dice Rolled</span></div><div class="grid-40"><span>Dice Results</span></div><div class="grid-20 reroll"><span>Reroll</span></div>';
+	var dr = document.querySelector("#dice-results");
+	dr.innerHTML = '<div class="grid-40"><span>Dice Rolled</span></div><div class="grid-40"><span>Dice Results</span></div><div class="grid-20 reroll"><span>Reroll</span></div>';
 }
 
 function rollDice() {

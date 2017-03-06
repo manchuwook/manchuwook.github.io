@@ -26,7 +26,8 @@
 				<meta http-equiv="X-UA-Compatible" content="IE=9"/>
 				<style type="text/css">
 					<xsl:comment>@import  url("tabs.css");
-@import  url("unsemantic-master/assets/stylesheets/unsemantic-grid-responsive-no-ie7.css");</xsl:comment>
+@import  url("unsemantic-master/assets/stylesheets/unsemantic-grid-responsive-no-ie7.css");
+@import  url("modal.css");</xsl:comment>
 				</style>
 				<xsl:comment>[if IE]&gt;&lt;STYLE type=&quot;text/css&quot;&gt;.altova-rotate-left-textbox{filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3)} .altova-rotate-right-textbox{filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1)} &lt;/STYLE&gt;&lt;![endif]</xsl:comment>
 				<xsl:comment>[if !IE]&gt;&lt;!</xsl:comment>
@@ -50,6 +51,16 @@ function openRoller(dice) {
 
 	// Set the tower back to visible
 	diceTower.style.display = &apos;block&apos;;
+}
+
+function closeTower() {
+	// Get a reference to the dice tower
+	var diceTower = document.querySelector(&apos;#dice-tower&apos;);
+	diceTower.style.display = &apos;none&apos;;
+
+	// Fetch a reference to the rolling area and clear it
+	var dr = document.querySelector(&quot;#dice-results&quot;);
+	dr.innerHTML = &apos;&lt;div class=&quot;grid-40&quot;&gt;&lt;span&gt;Dice Rolled&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;grid-40&quot;&gt;&lt;span&gt;Dice Results&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;grid-20 reroll&quot;&gt;&lt;span&gt;Reroll&lt;/span&gt;&lt;/div&gt;&apos;;
 }
 
 function rollDice() {
@@ -286,22 +297,44 @@ function rollDice() {
 																</span>
 															</td>
 															<td valign="top">
-																<span>
-																	<xsl:text>[</xsl:text>
-																</span>
-																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Electronic Warfare&apos;]/@modified)">
+																<a onclick="openRoller({sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Electronic Warfare&apos;]/@modified)})">
 																	<xsl:choose>
-																		<xsl:when test=". instance of element() or . instance of document-node()">
-																			<xsl:apply-templates/>
+																		<xsl:when test="not(string(&apos;&apos;))">
+																			<xsl:attribute name="href">
+																				<xsl:text>#</xsl:text>
+																			</xsl:attribute>
+																		</xsl:when>
+																		<xsl:when test="substring(string(&apos;&apos;), 1, 1) = '#'">
+																			<xsl:attribute name="href">
+																				<xsl:value-of select="&apos;&apos;"/>
+																			</xsl:attribute>
 																		</xsl:when>
 																		<xsl:otherwise>
-																			<xsl:value-of select="."/>
+																			<xsl:attribute name="href">
+																				<xsl:if test="substring(string(&apos;&apos;), 2, 1) = ':'">
+																					<xsl:text>file:///</xsl:text>
+																				</xsl:if>
+																				<xsl:value-of select="translate(string(&apos;&apos;), '&#x5c;', '/')"/>
+																			</xsl:attribute>
 																		</xsl:otherwise>
 																	</xsl:choose>
-																</xsl:for-each>
-																<span>
-																	<xsl:text>d6]</xsl:text>
-																</span>
+																	<span>
+																		<xsl:text>[</xsl:text>
+																	</span>
+																	<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Electronic Warfare&apos;]/@modified)">
+																		<xsl:choose>
+																			<xsl:when test=". instance of element() or . instance of document-node()">
+																				<xsl:apply-templates/>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<xsl:value-of select="."/>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																	<span>
+																		<xsl:text>d6]</xsl:text>
+																	</span>
+																</a>
 															</td>
 														</tr>
 														<tr>
@@ -405,22 +438,44 @@ function rollDice() {
 																</span>
 															</td>
 															<td valign="top">
-																<span>
-																	<xsl:text>[</xsl:text>
-																</span>
-																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Willpower&apos;]/@modified | skills/active/skill[@name=&apos;Hardware&apos;]/@modified)">
+																<a onclick="openRoller({sum(attributes/attribute[@name=&apos;Willpower&apos;]/@modified | skills/active/skill[@name=&apos;Hardware&apos;]/@modified)})">
 																	<xsl:choose>
-																		<xsl:when test=". instance of element() or . instance of document-node()">
-																			<xsl:apply-templates/>
+																		<xsl:when test="not(string(&apos;&apos;))">
+																			<xsl:attribute name="href">
+																				<xsl:text>#</xsl:text>
+																			</xsl:attribute>
+																		</xsl:when>
+																		<xsl:when test="substring(string(&apos;&apos;), 1, 1) = '#'">
+																			<xsl:attribute name="href">
+																				<xsl:value-of select="&apos;&apos;"/>
+																			</xsl:attribute>
 																		</xsl:when>
 																		<xsl:otherwise>
-																			<xsl:value-of select="."/>
+																			<xsl:attribute name="href">
+																				<xsl:if test="substring(string(&apos;&apos;), 2, 1) = ':'">
+																					<xsl:text>file:///</xsl:text>
+																				</xsl:if>
+																				<xsl:value-of select="translate(string(&apos;&apos;), '&#x5c;', '/')"/>
+																			</xsl:attribute>
 																		</xsl:otherwise>
 																	</xsl:choose>
-																</xsl:for-each>
-																<span>
-																	<xsl:text>d6]</xsl:text>
-																</span>
+																	<span>
+																		<xsl:text>[</xsl:text>
+																	</span>
+																	<xsl:for-each select="sum(attributes/attribute[@name=&apos;Willpower&apos;]/@modified | skills/active/skill[@name=&apos;Hardware&apos;]/@modified)">
+																		<xsl:choose>
+																			<xsl:when test=". instance of element() or . instance of document-node()">
+																				<xsl:apply-templates/>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<xsl:value-of select="."/>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																	<span>
+																		<xsl:text>d6]</xsl:text>
+																	</span>
+																</a>
 															</td>
 														</tr>
 														<tr>
@@ -618,22 +673,44 @@ function rollDice() {
 																</span>
 															</td>
 															<td valign="top">
-																<span>
-																	<xsl:text>[</xsl:text>
-																</span>
-																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Computer&apos;]/@modified)">
+																<a onclick="openRoller({sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Computer&apos;]/@modified)})">
 																	<xsl:choose>
-																		<xsl:when test=". instance of element() or . instance of document-node()">
-																			<xsl:apply-templates/>
+																		<xsl:when test="not(string(&apos;&apos;))">
+																			<xsl:attribute name="href">
+																				<xsl:text>#</xsl:text>
+																			</xsl:attribute>
+																		</xsl:when>
+																		<xsl:when test="substring(string(&apos;&apos;), 1, 1) = '#'">
+																			<xsl:attribute name="href">
+																				<xsl:value-of select="&apos;&apos;"/>
+																			</xsl:attribute>
 																		</xsl:when>
 																		<xsl:otherwise>
-																			<xsl:value-of select="."/>
+																			<xsl:attribute name="href">
+																				<xsl:if test="substring(string(&apos;&apos;), 2, 1) = ':'">
+																					<xsl:text>file:///</xsl:text>
+																				</xsl:if>
+																				<xsl:value-of select="translate(string(&apos;&apos;), '&#x5c;', '/')"/>
+																			</xsl:attribute>
 																		</xsl:otherwise>
 																	</xsl:choose>
-																</xsl:for-each>
-																<span>
-																	<xsl:text>d6]</xsl:text>
-																</span>
+																	<span>
+																		<xsl:text>[</xsl:text>
+																	</span>
+																	<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Computer&apos;]/@modified)">
+																		<xsl:choose>
+																			<xsl:when test=". instance of element() or . instance of document-node()">
+																				<xsl:apply-templates/>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<xsl:value-of select="."/>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																	<span>
+																		<xsl:text>d6]</xsl:text>
+																	</span>
+																</a>
 															</td>
 														</tr>
 														<tr bgcolor="#e1e1e1">
@@ -736,22 +813,44 @@ function rollDice() {
 																</span>
 															</td>
 															<td valign="top">
-																<span>
-																	<xsl:text>[</xsl:text>
-																</span>
-																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Computer&apos;]/@modified)">
+																<a onclick="openRoller({sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Computer&apos;]/@modified)})">
 																	<xsl:choose>
-																		<xsl:when test=". instance of element() or . instance of document-node()">
-																			<xsl:apply-templates/>
+																		<xsl:when test="not(string(&apos;&apos;))">
+																			<xsl:attribute name="href">
+																				<xsl:text>#</xsl:text>
+																			</xsl:attribute>
+																		</xsl:when>
+																		<xsl:when test="substring(string(&apos;&apos;), 1, 1) = '#'">
+																			<xsl:attribute name="href">
+																				<xsl:value-of select="&apos;&apos;"/>
+																			</xsl:attribute>
 																		</xsl:when>
 																		<xsl:otherwise>
-																			<xsl:value-of select="."/>
+																			<xsl:attribute name="href">
+																				<xsl:if test="substring(string(&apos;&apos;), 2, 1) = ':'">
+																					<xsl:text>file:///</xsl:text>
+																				</xsl:if>
+																				<xsl:value-of select="translate(string(&apos;&apos;), '&#x5c;', '/')"/>
+																			</xsl:attribute>
 																		</xsl:otherwise>
 																	</xsl:choose>
-																</xsl:for-each>
-																<span>
-																	<xsl:text>d6]</xsl:text>
-																</span>
+																	<span>
+																		<xsl:text>[</xsl:text>
+																	</span>
+																	<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Computer&apos;]/@modified)">
+																		<xsl:choose>
+																			<xsl:when test=". instance of element() or . instance of document-node()">
+																				<xsl:apply-templates/>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<xsl:value-of select="."/>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																	<span>
+																		<xsl:text>d6]</xsl:text>
+																	</span>
+																</a>
 															</td>
 														</tr>
 														<tr>
@@ -854,22 +953,44 @@ function rollDice() {
 																</span>
 															</td>
 															<td valign="top">
-																<span>
-																	<xsl:text>[</xsl:text>
-																</span>
-																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Intuition&apos;]/@modified | skills/active/skill[@name=&apos;Hacking&apos;]/@modified)">
+																<a onclick="openRoller({sum(attributes/attribute[@name=&apos;Intuition&apos;]/@modified | skills/active/skill[@name=&apos;Hacking&apos;]/@modified)})">
 																	<xsl:choose>
-																		<xsl:when test=". instance of element() or . instance of document-node()">
-																			<xsl:apply-templates/>
+																		<xsl:when test="not(string(&apos;&apos;))">
+																			<xsl:attribute name="href">
+																				<xsl:text>#</xsl:text>
+																			</xsl:attribute>
+																		</xsl:when>
+																		<xsl:when test="substring(string(&apos;&apos;), 1, 1) = '#'">
+																			<xsl:attribute name="href">
+																				<xsl:value-of select="&apos;&apos;"/>
+																			</xsl:attribute>
 																		</xsl:when>
 																		<xsl:otherwise>
-																			<xsl:value-of select="."/>
+																			<xsl:attribute name="href">
+																				<xsl:if test="substring(string(&apos;&apos;), 2, 1) = ':'">
+																					<xsl:text>file:///</xsl:text>
+																				</xsl:if>
+																				<xsl:value-of select="translate(string(&apos;&apos;), '&#x5c;', '/')"/>
+																			</xsl:attribute>
 																		</xsl:otherwise>
 																	</xsl:choose>
-																</xsl:for-each>
-																<span>
-																	<xsl:text>d6]</xsl:text>
-																</span>
+																	<span>
+																		<xsl:text>[</xsl:text>
+																	</span>
+																	<xsl:for-each select="sum(attributes/attribute[@name=&apos;Intuition&apos;]/@modified | skills/active/skill[@name=&apos;Hacking&apos;]/@modified)">
+																		<xsl:choose>
+																			<xsl:when test=". instance of element() or . instance of document-node()">
+																				<xsl:apply-templates/>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<xsl:value-of select="."/>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																	<span>
+																		<xsl:text>d6]</xsl:text>
+																	</span>
+																</a>
 															</td>
 														</tr>
 														<tr bgcolor="#e1e1e1">
@@ -972,22 +1093,44 @@ function rollDice() {
 																</span>
 															</td>
 															<td valign="top">
-																<span>
-																	<xsl:text>[</xsl:text>
-																</span>
-																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Software&apos;]/@modified)">
+																<a onclick="openRoller({sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Software&apos;]/@modified)})">
 																	<xsl:choose>
-																		<xsl:when test=". instance of element() or . instance of document-node()">
-																			<xsl:apply-templates/>
+																		<xsl:when test="not(string(&apos;&apos;))">
+																			<xsl:attribute name="href">
+																				<xsl:text>#</xsl:text>
+																			</xsl:attribute>
+																		</xsl:when>
+																		<xsl:when test="substring(string(&apos;&apos;), 1, 1) = '#'">
+																			<xsl:attribute name="href">
+																				<xsl:value-of select="&apos;&apos;"/>
+																			</xsl:attribute>
 																		</xsl:when>
 																		<xsl:otherwise>
-																			<xsl:value-of select="."/>
+																			<xsl:attribute name="href">
+																				<xsl:if test="substring(string(&apos;&apos;), 2, 1) = ':'">
+																					<xsl:text>file:///</xsl:text>
+																				</xsl:if>
+																				<xsl:value-of select="translate(string(&apos;&apos;), '&#x5c;', '/')"/>
+																			</xsl:attribute>
 																		</xsl:otherwise>
 																	</xsl:choose>
-																</xsl:for-each>
-																<span>
-																	<xsl:text>d6]</xsl:text>
-																</span>
+																	<span>
+																		<xsl:text>[</xsl:text>
+																	</span>
+																	<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Software&apos;]/@modified)">
+																		<xsl:choose>
+																			<xsl:when test=". instance of element() or . instance of document-node()">
+																				<xsl:apply-templates/>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<xsl:value-of select="."/>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																	<span>
+																		<xsl:text>d6]</xsl:text>
+																	</span>
+																</a>
 															</td>
 														</tr>
 														<tr>
@@ -1090,22 +1233,44 @@ function rollDice() {
 																</span>
 															</td>
 															<td valign="top">
-																<span>
-																	<xsl:text>[</xsl:text>
-																</span>
-																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Hacking&apos;]/@modified)">
+																<a onclick="openRoller({sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Hacking&apos;]/@modified)})">
 																	<xsl:choose>
-																		<xsl:when test=". instance of element() or . instance of document-node()">
-																			<xsl:apply-templates/>
+																		<xsl:when test="not(string(&apos;&apos;))">
+																			<xsl:attribute name="href">
+																				<xsl:text>#</xsl:text>
+																			</xsl:attribute>
+																		</xsl:when>
+																		<xsl:when test="substring(string(&apos;&apos;), 1, 1) = '#'">
+																			<xsl:attribute name="href">
+																				<xsl:value-of select="&apos;&apos;"/>
+																			</xsl:attribute>
 																		</xsl:when>
 																		<xsl:otherwise>
-																			<xsl:value-of select="."/>
+																			<xsl:attribute name="href">
+																				<xsl:if test="substring(string(&apos;&apos;), 2, 1) = ':'">
+																					<xsl:text>file:///</xsl:text>
+																				</xsl:if>
+																				<xsl:value-of select="translate(string(&apos;&apos;), '&#x5c;', '/')"/>
+																			</xsl:attribute>
 																		</xsl:otherwise>
 																	</xsl:choose>
-																</xsl:for-each>
-																<span>
-																	<xsl:text>d6]</xsl:text>
-																</span>
+																	<span>
+																		<xsl:text>[</xsl:text>
+																	</span>
+																	<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Hacking&apos;]/@modified)">
+																		<xsl:choose>
+																			<xsl:when test=". instance of element() or . instance of document-node()">
+																				<xsl:apply-templates/>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<xsl:value-of select="."/>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																	<span>
+																		<xsl:text>d6]</xsl:text>
+																	</span>
+																</a>
 															</td>
 														</tr>
 														<tr bgcolor="#e1e1e1">
@@ -1175,22 +1340,44 @@ function rollDice() {
 																</span>
 															</td>
 															<td valign="top">
-																<span>
-																	<xsl:text>[</xsl:text>
-																</span>
-																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Intuition&apos;]/@modified | skills/active/skill[@name=&apos;Software&apos;]/@modified)">
+																<a onclick="openRoller({sum(attributes/attribute[@name=&apos;Intuition&apos;]/@modified | skills/active/skill[@name=&apos;Software&apos;]/@modified)})">
 																	<xsl:choose>
-																		<xsl:when test=". instance of element() or . instance of document-node()">
-																			<xsl:apply-templates/>
+																		<xsl:when test="not(string(&apos;&apos;))">
+																			<xsl:attribute name="href">
+																				<xsl:text>#</xsl:text>
+																			</xsl:attribute>
+																		</xsl:when>
+																		<xsl:when test="substring(string(&apos;&apos;), 1, 1) = '#'">
+																			<xsl:attribute name="href">
+																				<xsl:value-of select="&apos;&apos;"/>
+																			</xsl:attribute>
 																		</xsl:when>
 																		<xsl:otherwise>
-																			<xsl:value-of select="."/>
+																			<xsl:attribute name="href">
+																				<xsl:if test="substring(string(&apos;&apos;), 2, 1) = ':'">
+																					<xsl:text>file:///</xsl:text>
+																				</xsl:if>
+																				<xsl:value-of select="translate(string(&apos;&apos;), '&#x5c;', '/')"/>
+																			</xsl:attribute>
 																		</xsl:otherwise>
 																	</xsl:choose>
-																</xsl:for-each>
-																<span>
-																	<xsl:text>d6]</xsl:text>
-																</span>
+																	<span>
+																		<xsl:text>[</xsl:text>
+																	</span>
+																	<xsl:for-each select="sum(attributes/attribute[@name=&apos;Intuition&apos;]/@modified | skills/active/skill[@name=&apos;Software&apos;]/@modified)">
+																		<xsl:choose>
+																			<xsl:when test=". instance of element() or . instance of document-node()">
+																				<xsl:apply-templates/>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<xsl:value-of select="."/>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																	<span>
+																		<xsl:text>d6]</xsl:text>
+																	</span>
+																</a>
 															</td>
 														</tr>
 														<tr>
@@ -1260,22 +1447,44 @@ function rollDice() {
 																</span>
 															</td>
 															<td valign="top">
-																<span>
-																	<xsl:text>[</xsl:text>
-																</span>
-																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Computer&apos;]/@modified)">
+																<a onclick="openRoller({sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Computer&apos;]/@modified)})">
 																	<xsl:choose>
-																		<xsl:when test=". instance of element() or . instance of document-node()">
-																			<xsl:apply-templates/>
+																		<xsl:when test="not(string(&apos;&apos;))">
+																			<xsl:attribute name="href">
+																				<xsl:text>#</xsl:text>
+																			</xsl:attribute>
+																		</xsl:when>
+																		<xsl:when test="substring(string(&apos;&apos;), 1, 1) = '#'">
+																			<xsl:attribute name="href">
+																				<xsl:value-of select="&apos;&apos;"/>
+																			</xsl:attribute>
 																		</xsl:when>
 																		<xsl:otherwise>
-																			<xsl:value-of select="."/>
+																			<xsl:attribute name="href">
+																				<xsl:if test="substring(string(&apos;&apos;), 2, 1) = ':'">
+																					<xsl:text>file:///</xsl:text>
+																				</xsl:if>
+																				<xsl:value-of select="translate(string(&apos;&apos;), '&#x5c;', '/')"/>
+																			</xsl:attribute>
 																		</xsl:otherwise>
 																	</xsl:choose>
-																</xsl:for-each>
-																<span>
-																	<xsl:text>d6]</xsl:text>
-																</span>
+																	<span>
+																		<xsl:text>[</xsl:text>
+																	</span>
+																	<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Computer&apos;]/@modified)">
+																		<xsl:choose>
+																			<xsl:when test=". instance of element() or . instance of document-node()">
+																				<xsl:apply-templates/>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<xsl:value-of select="."/>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																	<span>
+																		<xsl:text>d6]</xsl:text>
+																	</span>
+																</a>
 															</td>
 														</tr>
 														<tr bgcolor="#e1e1e1">
@@ -1378,22 +1587,44 @@ function rollDice() {
 																</span>
 															</td>
 															<td valign="top">
-																<span>
-																	<xsl:text>[</xsl:text>
-																</span>
-																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Software&apos;]/@modified)">
+																<a onclick="openRoller({sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Software&apos;]/@modified)})">
 																	<xsl:choose>
-																		<xsl:when test=". instance of element() or . instance of document-node()">
-																			<xsl:apply-templates/>
+																		<xsl:when test="not(string(&apos;&apos;))">
+																			<xsl:attribute name="href">
+																				<xsl:text>#</xsl:text>
+																			</xsl:attribute>
+																		</xsl:when>
+																		<xsl:when test="substring(string(&apos;&apos;), 1, 1) = '#'">
+																			<xsl:attribute name="href">
+																				<xsl:value-of select="&apos;&apos;"/>
+																			</xsl:attribute>
 																		</xsl:when>
 																		<xsl:otherwise>
-																			<xsl:value-of select="."/>
+																			<xsl:attribute name="href">
+																				<xsl:if test="substring(string(&apos;&apos;), 2, 1) = ':'">
+																					<xsl:text>file:///</xsl:text>
+																				</xsl:if>
+																				<xsl:value-of select="translate(string(&apos;&apos;), '&#x5c;', '/')"/>
+																			</xsl:attribute>
 																		</xsl:otherwise>
 																	</xsl:choose>
-																</xsl:for-each>
-																<span>
-																	<xsl:text>d6]</xsl:text>
-																</span>
+																	<span>
+																		<xsl:text>[</xsl:text>
+																	</span>
+																	<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Software&apos;]/@modified)">
+																		<xsl:choose>
+																			<xsl:when test=". instance of element() or . instance of document-node()">
+																				<xsl:apply-templates/>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<xsl:value-of select="."/>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																	<span>
+																		<xsl:text>d6]</xsl:text>
+																	</span>
+																</a>
 															</td>
 														</tr>
 														<tr>
@@ -1463,22 +1694,44 @@ function rollDice() {
 																</span>
 															</td>
 															<td valign="top">
-																<span>
-																	<xsl:text>[</xsl:text>
-																</span>
-																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Intuition&apos;]/@modified | skills/active/skill[@name=&apos;Computer&apos;]/@modified)">
+																<a onclick="openRoller({sum(attributes/attribute[@name=&apos;Intuition&apos;]/@modified | skills/active/skill[@name=&apos;Computer&apos;]/@modified)})">
 																	<xsl:choose>
-																		<xsl:when test=". instance of element() or . instance of document-node()">
-																			<xsl:apply-templates/>
+																		<xsl:when test="not(string(&apos;&apos;))">
+																			<xsl:attribute name="href">
+																				<xsl:text>#</xsl:text>
+																			</xsl:attribute>
+																		</xsl:when>
+																		<xsl:when test="substring(string(&apos;&apos;), 1, 1) = '#'">
+																			<xsl:attribute name="href">
+																				<xsl:value-of select="&apos;&apos;"/>
+																			</xsl:attribute>
 																		</xsl:when>
 																		<xsl:otherwise>
-																			<xsl:value-of select="."/>
+																			<xsl:attribute name="href">
+																				<xsl:if test="substring(string(&apos;&apos;), 2, 1) = ':'">
+																					<xsl:text>file:///</xsl:text>
+																				</xsl:if>
+																				<xsl:value-of select="translate(string(&apos;&apos;), '&#x5c;', '/')"/>
+																			</xsl:attribute>
 																		</xsl:otherwise>
 																	</xsl:choose>
-																</xsl:for-each>
-																<span>
-																	<xsl:text>d6]</xsl:text>
-																</span>
+																	<span>
+																		<xsl:text>[</xsl:text>
+																	</span>
+																	<xsl:for-each select="sum(attributes/attribute[@name=&apos;Intuition&apos;]/@modified | skills/active/skill[@name=&apos;Computer&apos;]/@modified)">
+																		<xsl:choose>
+																			<xsl:when test=". instance of element() or . instance of document-node()">
+																				<xsl:apply-templates/>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<xsl:value-of select="."/>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																	<span>
+																		<xsl:text>d6]</xsl:text>
+																	</span>
+																</a>
 															</td>
 														</tr>
 														<tr bgcolor="#e1e1e1">
@@ -1581,22 +1834,44 @@ function rollDice() {
 																</span>
 															</td>
 															<td valign="top">
-																<span>
-																	<xsl:text>[</xsl:text>
-																</span>
-																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Intuition&apos;]/@modified | skills/active/skill[@name=&apos;Electronic Warfare&apos;]/@modified)">
+																<a onclick="openRoller({sum(attributes/attribute[@name=&apos;Intuition&apos;]/@modified | skills/active/skill[@name=&apos;Electronic Warfare&apos;]/@modified)})">
 																	<xsl:choose>
-																		<xsl:when test=". instance of element() or . instance of document-node()">
-																			<xsl:apply-templates/>
+																		<xsl:when test="not(string(&apos;&apos;))">
+																			<xsl:attribute name="href">
+																				<xsl:text>#</xsl:text>
+																			</xsl:attribute>
+																		</xsl:when>
+																		<xsl:when test="substring(string(&apos;&apos;), 1, 1) = '#'">
+																			<xsl:attribute name="href">
+																				<xsl:value-of select="&apos;&apos;"/>
+																			</xsl:attribute>
 																		</xsl:when>
 																		<xsl:otherwise>
-																			<xsl:value-of select="."/>
+																			<xsl:attribute name="href">
+																				<xsl:if test="substring(string(&apos;&apos;), 2, 1) = ':'">
+																					<xsl:text>file:///</xsl:text>
+																				</xsl:if>
+																				<xsl:value-of select="translate(string(&apos;&apos;), '&#x5c;', '/')"/>
+																			</xsl:attribute>
 																		</xsl:otherwise>
 																	</xsl:choose>
-																</xsl:for-each>
-																<span>
-																	<xsl:text>d6]</xsl:text>
-																</span>
+																	<span>
+																		<xsl:text>[</xsl:text>
+																	</span>
+																	<xsl:for-each select="sum(attributes/attribute[@name=&apos;Intuition&apos;]/@modified | skills/active/skill[@name=&apos;Electronic Warfare&apos;]/@modified)">
+																		<xsl:choose>
+																			<xsl:when test=". instance of element() or . instance of document-node()">
+																				<xsl:apply-templates/>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<xsl:value-of select="."/>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																	<span>
+																		<xsl:text>d6]</xsl:text>
+																	</span>
+																</a>
 															</td>
 														</tr>
 														<tr>
@@ -1699,22 +1974,44 @@ function rollDice() {
 																</span>
 															</td>
 															<td valign="top">
-																<span>
-																	<xsl:text>[</xsl:text>
-																</span>
-																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Intuition&apos;]/@modified | skills/active/skill[@name=&apos;Computer&apos;]/@modified)">
+																<a onclick="openRoller({sum(attributes/attribute[@name=&apos;Intuition&apos;]/@modified | skills/active/skill[@name=&apos;Computer&apos;]/@modified)})">
 																	<xsl:choose>
-																		<xsl:when test=". instance of element() or . instance of document-node()">
-																			<xsl:apply-templates/>
+																		<xsl:when test="not(string(&apos;&apos;))">
+																			<xsl:attribute name="href">
+																				<xsl:text>#</xsl:text>
+																			</xsl:attribute>
+																		</xsl:when>
+																		<xsl:when test="substring(string(&apos;&apos;), 1, 1) = '#'">
+																			<xsl:attribute name="href">
+																				<xsl:value-of select="&apos;&apos;"/>
+																			</xsl:attribute>
 																		</xsl:when>
 																		<xsl:otherwise>
-																			<xsl:value-of select="."/>
+																			<xsl:attribute name="href">
+																				<xsl:if test="substring(string(&apos;&apos;), 2, 1) = ':'">
+																					<xsl:text>file:///</xsl:text>
+																				</xsl:if>
+																				<xsl:value-of select="translate(string(&apos;&apos;), '&#x5c;', '/')"/>
+																			</xsl:attribute>
 																		</xsl:otherwise>
 																	</xsl:choose>
-																</xsl:for-each>
-																<span>
-																	<xsl:text>d6]</xsl:text>
-																</span>
+																	<span>
+																		<xsl:text>[</xsl:text>
+																	</span>
+																	<xsl:for-each select="sum(attributes/attribute[@name=&apos;Intuition&apos;]/@modified | skills/active/skill[@name=&apos;Computer&apos;]/@modified)">
+																		<xsl:choose>
+																			<xsl:when test=". instance of element() or . instance of document-node()">
+																				<xsl:apply-templates/>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<xsl:value-of select="."/>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																	<span>
+																		<xsl:text>d6]</xsl:text>
+																	</span>
+																</a>
 															</td>
 														</tr>
 														<tr bgcolor="#e1e1e1">
@@ -1817,22 +2114,44 @@ function rollDice() {
 																</span>
 															</td>
 															<td valign="top">
-																<span>
-																	<xsl:text>[</xsl:text>
-																</span>
-																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Cybercombat&apos;]/@modified)">
+																<a onclick="openRoller({sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Cybercombat&apos;]/@modified)})">
 																	<xsl:choose>
-																		<xsl:when test=". instance of element() or . instance of document-node()">
-																			<xsl:apply-templates/>
+																		<xsl:when test="not(string(&apos;&apos;))">
+																			<xsl:attribute name="href">
+																				<xsl:text>#</xsl:text>
+																			</xsl:attribute>
+																		</xsl:when>
+																		<xsl:when test="substring(string(&apos;&apos;), 1, 1) = '#'">
+																			<xsl:attribute name="href">
+																				<xsl:value-of select="&apos;&apos;"/>
+																			</xsl:attribute>
 																		</xsl:when>
 																		<xsl:otherwise>
-																			<xsl:value-of select="."/>
+																			<xsl:attribute name="href">
+																				<xsl:if test="substring(string(&apos;&apos;), 2, 1) = ':'">
+																					<xsl:text>file:///</xsl:text>
+																				</xsl:if>
+																				<xsl:value-of select="translate(string(&apos;&apos;), '&#x5c;', '/')"/>
+																			</xsl:attribute>
 																		</xsl:otherwise>
 																	</xsl:choose>
-																</xsl:for-each>
-																<span>
-																	<xsl:text>d6]</xsl:text>
-																</span>
+																	<span>
+																		<xsl:text>[</xsl:text>
+																	</span>
+																	<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Cybercombat&apos;]/@modified)">
+																		<xsl:choose>
+																			<xsl:when test=". instance of element() or . instance of document-node()">
+																				<xsl:apply-templates/>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<xsl:value-of select="."/>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																	<span>
+																		<xsl:text>d6]</xsl:text>
+																	</span>
+																</a>
 															</td>
 														</tr>
 														<tr>
@@ -1935,22 +2254,44 @@ function rollDice() {
 																</span>
 															</td>
 															<td valign="top">
-																<span>
-																	<xsl:text>[</xsl:text>
-																</span>
-																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Cybercombat&apos;]/@modified)">
+																<a onclick="openRoller({sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Cybercombat&apos;]/@modified)})">
 																	<xsl:choose>
-																		<xsl:when test=". instance of element() or . instance of document-node()">
-																			<xsl:apply-templates/>
+																		<xsl:when test="not(string(&apos;&apos;))">
+																			<xsl:attribute name="href">
+																				<xsl:text>#</xsl:text>
+																			</xsl:attribute>
+																		</xsl:when>
+																		<xsl:when test="substring(string(&apos;&apos;), 1, 1) = '#'">
+																			<xsl:attribute name="href">
+																				<xsl:value-of select="&apos;&apos;"/>
+																			</xsl:attribute>
 																		</xsl:when>
 																		<xsl:otherwise>
-																			<xsl:value-of select="."/>
+																			<xsl:attribute name="href">
+																				<xsl:if test="substring(string(&apos;&apos;), 2, 1) = ':'">
+																					<xsl:text>file:///</xsl:text>
+																				</xsl:if>
+																				<xsl:value-of select="translate(string(&apos;&apos;), '&#x5c;', '/')"/>
+																			</xsl:attribute>
 																		</xsl:otherwise>
 																	</xsl:choose>
-																</xsl:for-each>
-																<span>
-																	<xsl:text>d6]</xsl:text>
-																</span>
+																	<span>
+																		<xsl:text>[</xsl:text>
+																	</span>
+																	<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Cybercombat&apos;]/@modified)">
+																		<xsl:choose>
+																			<xsl:when test=". instance of element() or . instance of document-node()">
+																				<xsl:apply-templates/>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<xsl:value-of select="."/>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																	<span>
+																		<xsl:text>d6]</xsl:text>
+																	</span>
+																</a>
 															</td>
 														</tr>
 														<tr bgcolor="#e1e1e1">
@@ -2020,22 +2361,44 @@ function rollDice() {
 																</span>
 															</td>
 															<td valign="top">
-																<span>
-																	<xsl:text>[</xsl:text>
-																</span>
-																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Computer&apos;]/@modified)">
+																<a onclick="openRoller({sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Computer&apos;]/@modified)})">
 																	<xsl:choose>
-																		<xsl:when test=". instance of element() or . instance of document-node()">
-																			<xsl:apply-templates/>
+																		<xsl:when test="not(string(&apos;&apos;))">
+																			<xsl:attribute name="href">
+																				<xsl:text>#</xsl:text>
+																			</xsl:attribute>
+																		</xsl:when>
+																		<xsl:when test="substring(string(&apos;&apos;), 1, 1) = '#'">
+																			<xsl:attribute name="href">
+																				<xsl:value-of select="&apos;&apos;"/>
+																			</xsl:attribute>
 																		</xsl:when>
 																		<xsl:otherwise>
-																			<xsl:value-of select="."/>
+																			<xsl:attribute name="href">
+																				<xsl:if test="substring(string(&apos;&apos;), 2, 1) = ':'">
+																					<xsl:text>file:///</xsl:text>
+																				</xsl:if>
+																				<xsl:value-of select="translate(string(&apos;&apos;), '&#x5c;', '/')"/>
+																			</xsl:attribute>
 																		</xsl:otherwise>
 																	</xsl:choose>
-																</xsl:for-each>
-																<span>
-																	<xsl:text>d6]</xsl:text>
-																</span>
+																	<span>
+																		<xsl:text>[</xsl:text>
+																	</span>
+																	<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Computer&apos;]/@modified)">
+																		<xsl:choose>
+																			<xsl:when test=". instance of element() or . instance of document-node()">
+																				<xsl:apply-templates/>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<xsl:value-of select="."/>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																	<span>
+																		<xsl:text>d6]</xsl:text>
+																	</span>
+																</a>
 															</td>
 														</tr>
 														<tr>
@@ -2274,22 +2637,44 @@ function rollDice() {
 																</span>
 															</td>
 															<td valign="top">
-																<span>
-																	<xsl:text>[</xsl:text>
-																</span>
-																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Hacking&apos;]/@modified)">
+																<a onclick="openRoller({sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Hacking&apos;]/@modified)})">
 																	<xsl:choose>
-																		<xsl:when test=". instance of element() or . instance of document-node()">
-																			<xsl:apply-templates/>
+																		<xsl:when test="not(string(&apos;&apos;))">
+																			<xsl:attribute name="href">
+																				<xsl:text>#</xsl:text>
+																			</xsl:attribute>
+																		</xsl:when>
+																		<xsl:when test="substring(string(&apos;&apos;), 1, 1) = '#'">
+																			<xsl:attribute name="href">
+																				<xsl:value-of select="&apos;&apos;"/>
+																			</xsl:attribute>
 																		</xsl:when>
 																		<xsl:otherwise>
-																			<xsl:value-of select="."/>
+																			<xsl:attribute name="href">
+																				<xsl:if test="substring(string(&apos;&apos;), 2, 1) = ':'">
+																					<xsl:text>file:///</xsl:text>
+																				</xsl:if>
+																				<xsl:value-of select="translate(string(&apos;&apos;), '&#x5c;', '/')"/>
+																			</xsl:attribute>
 																		</xsl:otherwise>
 																	</xsl:choose>
-																</xsl:for-each>
-																<span>
-																	<xsl:text>d6]</xsl:text>
-																</span>
+																	<span>
+																		<xsl:text>[</xsl:text>
+																	</span>
+																	<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Hacking&apos;]/@modified)">
+																		<xsl:choose>
+																			<xsl:when test=". instance of element() or . instance of document-node()">
+																				<xsl:apply-templates/>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<xsl:value-of select="."/>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																	<span>
+																		<xsl:text>d6]</xsl:text>
+																	</span>
+																</a>
 															</td>
 														</tr>
 														<tr>
@@ -2359,22 +2744,44 @@ function rollDice() {
 																</span>
 															</td>
 															<td valign="top">
-																<span>
-																	<xsl:text>[</xsl:text>
-																</span>
-																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Cybercombat&apos;]/@modified)">
+																<a onclick="openRoller({sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Cybercombat&apos;]/@modified)})">
 																	<xsl:choose>
-																		<xsl:when test=". instance of element() or . instance of document-node()">
-																			<xsl:apply-templates/>
+																		<xsl:when test="not(string(&apos;&apos;))">
+																			<xsl:attribute name="href">
+																				<xsl:text>#</xsl:text>
+																			</xsl:attribute>
+																		</xsl:when>
+																		<xsl:when test="substring(string(&apos;&apos;), 1, 1) = '#'">
+																			<xsl:attribute name="href">
+																				<xsl:value-of select="&apos;&apos;"/>
+																			</xsl:attribute>
 																		</xsl:when>
 																		<xsl:otherwise>
-																			<xsl:value-of select="."/>
+																			<xsl:attribute name="href">
+																				<xsl:if test="substring(string(&apos;&apos;), 2, 1) = ':'">
+																					<xsl:text>file:///</xsl:text>
+																				</xsl:if>
+																				<xsl:value-of select="translate(string(&apos;&apos;), '&#x5c;', '/')"/>
+																			</xsl:attribute>
 																		</xsl:otherwise>
 																	</xsl:choose>
-																</xsl:for-each>
-																<span>
-																	<xsl:text>d6]</xsl:text>
-																</span>
+																	<span>
+																		<xsl:text>[</xsl:text>
+																	</span>
+																	<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Cybercombat&apos;]/@modified)">
+																		<xsl:choose>
+																			<xsl:when test=". instance of element() or . instance of document-node()">
+																				<xsl:apply-templates/>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<xsl:value-of select="."/>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																	<span>
+																		<xsl:text>d6]</xsl:text>
+																	</span>
+																</a>
 															</td>
 														</tr>
 														<tr bgcolor="#e1e1e1">
@@ -2477,22 +2884,44 @@ function rollDice() {
 																</span>
 															</td>
 															<td valign="top">
-																<span>
-																	<xsl:text>[</xsl:text>
-																</span>
-																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Cybercombat&apos;]/@modified)">
+																<a onclick="openRoller({sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Cybercombat&apos;]/@modified)})">
 																	<xsl:choose>
-																		<xsl:when test=". instance of element() or . instance of document-node()">
-																			<xsl:apply-templates/>
+																		<xsl:when test="not(string(&apos;&apos;))">
+																			<xsl:attribute name="href">
+																				<xsl:text>#</xsl:text>
+																			</xsl:attribute>
+																		</xsl:when>
+																		<xsl:when test="substring(string(&apos;&apos;), 1, 1) = '#'">
+																			<xsl:attribute name="href">
+																				<xsl:value-of select="&apos;&apos;"/>
+																			</xsl:attribute>
 																		</xsl:when>
 																		<xsl:otherwise>
-																			<xsl:value-of select="."/>
+																			<xsl:attribute name="href">
+																				<xsl:if test="substring(string(&apos;&apos;), 2, 1) = ':'">
+																					<xsl:text>file:///</xsl:text>
+																				</xsl:if>
+																				<xsl:value-of select="translate(string(&apos;&apos;), '&#x5c;', '/')"/>
+																			</xsl:attribute>
 																		</xsl:otherwise>
 																	</xsl:choose>
-																</xsl:for-each>
-																<span>
-																	<xsl:text>d6]</xsl:text>
-																</span>
+																	<span>
+																		<xsl:text>[</xsl:text>
+																	</span>
+																	<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Cybercombat&apos;]/@modified)">
+																		<xsl:choose>
+																			<xsl:when test=". instance of element() or . instance of document-node()">
+																				<xsl:apply-templates/>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<xsl:value-of select="."/>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																	<span>
+																		<xsl:text>d6]</xsl:text>
+																	</span>
+																</a>
 															</td>
 														</tr>
 														<tr>
@@ -2663,22 +3092,44 @@ function rollDice() {
 																</span>
 															</td>
 															<td valign="top">
-																<span>
-																	<xsl:text>[</xsl:text>
-																</span>
-																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Intuition&apos;]/@modified | skills/active/skill[@name=&apos;Electronic Warfare&apos;]/@modified)">
+																<a onclick="openRoller({sum(attributes/attribute[@name=&apos;Intuition&apos;]/@modified | skills/active/skill[@name=&apos;Electronic Warfare&apos;]/@modified)})">
 																	<xsl:choose>
-																		<xsl:when test=". instance of element() or . instance of document-node()">
-																			<xsl:apply-templates/>
+																		<xsl:when test="not(string(&apos;&apos;))">
+																			<xsl:attribute name="href">
+																				<xsl:text>#</xsl:text>
+																			</xsl:attribute>
+																		</xsl:when>
+																		<xsl:when test="substring(string(&apos;&apos;), 1, 1) = '#'">
+																			<xsl:attribute name="href">
+																				<xsl:value-of select="&apos;&apos;"/>
+																			</xsl:attribute>
 																		</xsl:when>
 																		<xsl:otherwise>
-																			<xsl:value-of select="."/>
+																			<xsl:attribute name="href">
+																				<xsl:if test="substring(string(&apos;&apos;), 2, 1) = ':'">
+																					<xsl:text>file:///</xsl:text>
+																				</xsl:if>
+																				<xsl:value-of select="translate(string(&apos;&apos;), '&#x5c;', '/')"/>
+																			</xsl:attribute>
 																		</xsl:otherwise>
 																	</xsl:choose>
-																</xsl:for-each>
-																<span>
-																	<xsl:text>d6]</xsl:text>
-																</span>
+																	<span>
+																		<xsl:text>[</xsl:text>
+																	</span>
+																	<xsl:for-each select="sum(attributes/attribute[@name=&apos;Intuition&apos;]/@modified | skills/active/skill[@name=&apos;Electronic Warfare&apos;]/@modified)">
+																		<xsl:choose>
+																			<xsl:when test=". instance of element() or . instance of document-node()">
+																				<xsl:apply-templates/>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<xsl:value-of select="."/>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																	<span>
+																		<xsl:text>d6]</xsl:text>
+																	</span>
+																</a>
 															</td>
 														</tr>
 														<tr bgcolor="#e1e1e1">
@@ -2781,22 +3232,44 @@ function rollDice() {
 																</span>
 															</td>
 															<td valign="top">
-																<span>
-																	<xsl:text>[</xsl:text>
-																</span>
-																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Electronic Warfare&apos;]/@modified)">
+																<a onclick="openRoller({sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Electronic Warfare&apos;]/@modified)})">
 																	<xsl:choose>
-																		<xsl:when test=". instance of element() or . instance of document-node()">
-																			<xsl:apply-templates/>
+																		<xsl:when test="not(string(&apos;&apos;))">
+																			<xsl:attribute name="href">
+																				<xsl:text>#</xsl:text>
+																			</xsl:attribute>
+																		</xsl:when>
+																		<xsl:when test="substring(string(&apos;&apos;), 1, 1) = '#'">
+																			<xsl:attribute name="href">
+																				<xsl:value-of select="&apos;&apos;"/>
+																			</xsl:attribute>
 																		</xsl:when>
 																		<xsl:otherwise>
-																			<xsl:value-of select="."/>
+																			<xsl:attribute name="href">
+																				<xsl:if test="substring(string(&apos;&apos;), 2, 1) = ':'">
+																					<xsl:text>file:///</xsl:text>
+																				</xsl:if>
+																				<xsl:value-of select="translate(string(&apos;&apos;), '&#x5c;', '/')"/>
+																			</xsl:attribute>
 																		</xsl:otherwise>
 																	</xsl:choose>
-																</xsl:for-each>
-																<span>
-																	<xsl:text>d6]</xsl:text>
-																</span>
+																	<span>
+																		<xsl:text>[</xsl:text>
+																	</span>
+																	<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Electronic Warfare&apos;]/@modified)">
+																		<xsl:choose>
+																			<xsl:when test=". instance of element() or . instance of document-node()">
+																				<xsl:apply-templates/>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<xsl:value-of select="."/>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																	<span>
+																		<xsl:text>d6]</xsl:text>
+																	</span>
+																</a>
 															</td>
 														</tr>
 														<tr>
@@ -2862,22 +3335,44 @@ function rollDice() {
 																</span>
 															</td>
 															<td valign="top">
-																<span>
-																	<xsl:text>[</xsl:text>
-																</span>
-																<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Electronic Warfare&apos;]/@modified)">
+																<a onclick="openRoller({sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Electronic Warfare&apos;]/@modified)})">
 																	<xsl:choose>
-																		<xsl:when test=". instance of element() or . instance of document-node()">
-																			<xsl:apply-templates/>
+																		<xsl:when test="not(string(&apos;&apos;))">
+																			<xsl:attribute name="href">
+																				<xsl:text>#</xsl:text>
+																			</xsl:attribute>
+																		</xsl:when>
+																		<xsl:when test="substring(string(&apos;&apos;), 1, 1) = '#'">
+																			<xsl:attribute name="href">
+																				<xsl:value-of select="&apos;&apos;"/>
+																			</xsl:attribute>
 																		</xsl:when>
 																		<xsl:otherwise>
-																			<xsl:value-of select="."/>
+																			<xsl:attribute name="href">
+																				<xsl:if test="substring(string(&apos;&apos;), 2, 1) = ':'">
+																					<xsl:text>file:///</xsl:text>
+																				</xsl:if>
+																				<xsl:value-of select="translate(string(&apos;&apos;), '&#x5c;', '/')"/>
+																			</xsl:attribute>
 																		</xsl:otherwise>
 																	</xsl:choose>
-																</xsl:for-each>
-																<span>
-																	<xsl:text>d6]</xsl:text>
-																</span>
+																	<span>
+																		<xsl:text>[</xsl:text>
+																	</span>
+																	<xsl:for-each select="sum(attributes/attribute[@name=&apos;Logic&apos;]/@modified | skills/active/skill[@name=&apos;Electronic Warfare&apos;]/@modified)">
+																		<xsl:choose>
+																			<xsl:when test=". instance of element() or . instance of document-node()">
+																				<xsl:apply-templates/>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<xsl:value-of select="."/>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																	<span>
+																		<xsl:text>d6]</xsl:text>
+																	</span>
+																</a>
 															</td>
 														</tr>
 														<tr bgcolor="#e1e1e1">
@@ -3138,8 +3633,17 @@ function rollDice() {
 						</xsl:for-each>
 					</xsl:element>
 				</xsl:element>
-				<br/>
-				<div style="display:none; " class="grid-container" id="dice-tower">
+				<div style="display:none; " class="grid-container modal-content" id="dice-tower">
+					<div class="grid-container close" onclick="closeTower()">
+						<span>
+							<xsl:text>X</xsl:text>
+						</span>
+					</div>
+					<div class="modal-header" onclick="closeTower()">
+						<span>
+							<xsl:text>Dice Roller</xsl:text>
+						</span>
+					</div>
 					<xsl:element name="div">
 						<xsl:attribute name="class">
 							<xsl:value-of select="'grid-66 grid-parent'"/>
@@ -3177,7 +3681,6 @@ function rollDice() {
 						<xsl:attribute name="class">
 							<xsl:value-of select="'grid-33 grid-parent'"/>
 						</xsl:attribute>
-						<br/>
 						<xsl:element name="div">
 							<xsl:attribute name="class">
 								<xsl:value-of select="'grid-100'"/>
@@ -3198,7 +3701,7 @@ function rollDice() {
 								<xsl:text>Dice</xsl:text>
 							</span>
 						</xsl:element>
-						<div class="grid-50" id="dice">
+						<div id="dice">
 							<span id="dice">
 								<xsl:text>6</xsl:text>
 							</span>
@@ -3295,7 +3798,11 @@ function rollDice() {
 						</xsl:element>
 						<br/>
 					</xsl:element>
-					<br/>
+					<div class="modal-footer">
+						<span>
+							<xsl:text>[ ]</xsl:text>
+						</span>
+					</div>
 				</div>
 			</body>
 		</html>
