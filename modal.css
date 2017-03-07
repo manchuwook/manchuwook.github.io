@@ -21,7 +21,7 @@
     position: fixed;
     bottom: 0;
     background-color: #fefefe;
-    width: 100%;
+    /* width: 100%; */
     -webkit-animation-name: slideIn;
     -webkit-animation-duration: 0.4s;
     animation-name: slideIn;
@@ -45,7 +45,7 @@
 
 .modal-header {
     padding: 2px 16px;
-    background-color: #5cb85c;
+    /* background-color: #5cb85c; */
     color: white;
 }
 
@@ -53,7 +53,7 @@
 
 .modal-footer {
     padding: 2px 16px;
-    background-color: #5cb85c;
+    /* background-color: #5cb85c; */
     color: white;
 }
 
@@ -87,5 +87,22 @@
 }
 
 #edge-dice {
+	width: 50px;
+}
+
+#dice-results {
+	height: 300px;
+	overflow-y: scroll;
+}
+
+#action-roll h1 {
+	text-align: center;
+	text-shadow: 0 0 3px #FF0000;
+}
+.dice-mod {
+	text-align: right;
+}
+
+#bonus-dice, #penalty-dice, #edge-dice {
 	width: 50px;
 }
