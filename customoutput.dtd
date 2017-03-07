@@ -1,0 +1,502 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- DTD for Hero Lab custom output for the Shadowrun  Roleplaying Game -->
+<!ELEMENT document ((public))>
+
+<!ELEMENT public ((program, localization, character+))>
+
+<!ELEMENT program ((programinfo, version))>
+<!ATTLIST program
+	name CDATA #REQUIRED
+	url CDATA #REQUIRED
+>
+
+<!ELEMENT programinfo (#PCDATA)>
+
+<!ELEMENT version EMPTY>
+<!ATTLIST version
+	version CDATA #REQUIRED
+	build CDATA #IMPLIED
+	primary CDATA #IMPLIED
+	secondary CDATA #IMPLIED
+	tertiary CDATA #IMPLIED
+>
+
+<!ELEMENT localization EMPTY>
+<!ATTLIST localization
+	language CDATA #REQUIRED
+	units CDATA #REQUIRED
+>
+
+<!ELEMENT character ((race, heritage, creation, karma, cash, personal, defenses, armorratings, attributes, movementtypes, reputations, qualities, skills, magic?, resonance?, gear, identities, contacts, ammotrackers, trackers, conditionmonitors, journals, images?, validation, settings, npc?, minions))>
+<!ATTLIST character
+	active (yes | no) "no"
+	name CDATA #REQUIRED
+	nature CDATA #FIXED "normal"
+	playername CDATA #REQUIRED
+	relationship (enemy | ally) #REQUIRED
+	role (pc | npc) #REQUIRED
+	type CDATA #FIXED "Hero"
+>
+
+<!ELEMENT race EMPTY>
+<!ATTLIST race
+	name CDATA #REQUIRED
+>
+
+<!ELEMENT heritage EMPTY>
+<!ATTLIST heritage
+	name CDATA #REQUIRED
+>
+
+<!ELEMENT description (#PCDATA)>
+
+<!ELEMENT traitcost EMPTY>
+<!ATTLIST traitcost
+	bp CDATA #IMPLIED
+	powerpoints CDATA #IMPLIED
+>
+
+<!ELEMENT creation ((bp))>
+
+<!ELEMENT bp EMPTY>
+<!ATTLIST bp
+	left CDATA #REQUIRED
+	total CDATA #REQUIRED
+>
+
+<!ELEMENT karma EMPTY>
+<!ATTLIST karma
+	left CDATA #REQUIRED
+	total CDATA #REQUIRED
+>
+
+<!ELEMENT cash EMPTY>
+<!ATTLIST cash
+	total CDATA #REQUIRED
+>
+
+<!ELEMENT personal ((description, charheight, charweight))>
+<!ATTLIST personal
+	age CDATA #REQUIRED
+	eyes CDATA #REQUIRED
+	gender CDATA #REQUIRED
+	hair CDATA #REQUIRED
+	skin CDATA #REQUIRED
+>
+<!ELEMENT charheight EMPTY>
+<!ATTLIST charheight
+	text CDATA #REQUIRED
+	value CDATA #REQUIRED
+>
+<!ELEMENT charweight EMPTY>
+<!ATTLIST charweight
+	text CDATA #REQUIRED
+	value CDATA #REQUIRED
+>
+
+<!ELEMENT defenses ((defense*))>
+<!ELEMENT defense EMPTY>
+<!ATTLIST defense
+	name CDATA #REQUIRED
+	normal CDATA #REQUIRED
+	full CDATA #REQUIRED
+	ismatrix (yes | no) "no"
+>
+
+<!ELEMENT armorratings ((armorrating*))>
+<!ELEMENT armorrating EMPTY>
+<!ATTLIST armorrating
+	dicepool CDATA #REQUIRED
+	name CDATA #REQUIRED
+	nonstacking CDATA #REQUIRED
+	rating CDATA #REQUIRED
+	stacking CDATA #REQUIRED
+>
+
+<!ELEMENT attributes ((attribute*))>
+<!ELEMENT attribute ((description, traitcost))>
+<!ATTLIST attribute
+	augmentedmaximum CDATA #REQUIRED
+	base CDATA #REQUIRED
+	category CDATA #REQUIRED
+	minimum CDATA #REQUIRED
+	modified CDATA #REQUIRED
+	name CDATA #REQUIRED
+	naturalmaximum CDATA #REQUIRED
+	text CDATA #REQUIRED
+>
+
+<!ELEMENT movementtypes ((movementtype*))>
+
+<!ELEMENT movementtype ((walking?, running?))>
+<!ATTLIST movementtype
+	name CDATA #IMPLIED
+	sprintpool CDATA #IMPLIED
+>
+
+<!ELEMENT walking EMPTY>
+<!ATTLIST walking
+	text CDATA #REQUIRED
+	value CDATA #REQUIRED
+>
+
+<!ELEMENT running EMPTY>
+<!ATTLIST running
+	text CDATA #REQUIRED
+	value CDATA #REQUIRED
+>
+
+<!ELEMENT reputations ((reputation*))>
+<!ELEMENT reputation EMPTY>
+<!ATTLIST reputation
+	name CDATA #REQUIRED
+	value CDATA #REQUIRED
+>
+
+<!ELEMENT qualities ((positive, negative))>
+<!ELEMENT positive ((quality*))>
+<!ELEMENT negative ((quality*))>
+
+<!ELEMENT quality ((description, traitcost))>
+<!ATTLIST quality
+	name CDATA #REQUIRED
+	rank CDATA #IMPLIED
+>
+
+<!ELEMENT skills ((groups, active, knowledge, language))>
+<!ELEMENT groups ((skill*))>
+<!ELEMENT active ((skill*))>
+<!ELEMENT knowledge ((skill*))>
+<!ELEMENT language ((skill*))>
+
+<!ELEMENT skill ((specialization?, addsskill*, description, traitcost))>
+<!ATTLIST skill
+	augmentedmaximum CDATA #REQUIRED
+	base CDATA #REQUIRED
+	dicepool CDATA #IMPLIED
+	fromgroup (yes | no) "no"
+	group CDATA #IMPLIED
+	modified CDATA #REQUIRED
+	name CDATA #REQUIRED
+	naturalmaximum CDATA #REQUIRED
+	text CDATA #REQUIRED
+>
+
+<!ELEMENT specialization EMPTY>
+<!ATTLIST specialization
+	bonustext CDATA #REQUIRED
+>
+
+<!ELEMENT addsskill EMPTY>
+<!ATTLIST addsskill
+	name CDATA #REQUIRED
+>
+
+<!ELEMENT magic ((tradition?, spells, adeptpowers, metamagics))>
+
+<!ELEMENT tradition EMPTY>
+<!ATTLIST tradition
+	combatspirits CDATA #REQUIRED
+	detectspirits CDATA #REQUIRED
+	drain CDATA #REQUIRED
+	healthspirits CDATA #REQUIRED
+	illusionspirits CDATA #REQUIRED
+	manipulationspirits CDATA #REQUIRED
+	name CDATA #REQUIRED
+>
+
+<!ELEMENT spells ((spell*))>
+<!ELEMENT spell ((description, traitcost))>
+<!ATTLIST spell
+	casting CDATA #REQUIRED
+	category CDATA #REQUIRED
+	drain CDATA #REQUIRED
+	draintext CDATA #REQUIRED
+	drainvalue CDATA #REQUIRED
+	duration CDATA #REQUIRED
+	name CDATA #REQUIRED
+	range CDATA #REQUIRED
+	ritualcasting CDATA #REQUIRED
+	subcat CDATA #REQUIRED
+	type CDATA #REQUIRED
+>
+
+<!ELEMENT adeptpowers ((adeptpower*))>
+<!ELEMENT adeptpower ((description, traitcost))>
+<!ATTLIST adeptpower
+	text CDATA #REQUIRED
+	name CDATA #REQUIRED
+	rating CDATA #IMPLIED
+>
+
+<!ELEMENT metamagics ((metamagic*))>
+<!ELEMENT metamagic ((description))>
+<!ATTLIST metamagic
+	name CDATA #REQUIRED
+>
+
+<!ELEMENT innatespells ((spells))>
+
+<!ELEMENT resonance ((stream?, complexforms, echoes))>
+
+<!ELEMENT stream EMPTY>
+<!ATTLIST stream
+	fading CDATA #REQUIRED
+	name CDATA #REQUIRED
+>
+
+<!ELEMENT complexforms ((complexform*))>
+<!ELEMENT complexform ((description, traitcost))>
+<!ATTLIST complexform
+	dicepool CDATA #REQUIRED
+	name CDATA #REQUIRED
+	rating CDATA #REQUIRED
+	useradded (yes | no) "yes"
+>
+
+<!ELEMENT echoes ((echo*))>
+<!ELEMENT echo ((description))>
+<!ATTLIST echo
+	name CDATA #REQUIRED
+>
+
+<!ELEMENT gear ((augmentations, weapons, armor, equipment))>
+
+<!ELEMENT augmentations ((cyberware, bioware))>
+<!ELEMENT cyberware ((item*))>
+<!ELEMENT bioware ((item*))>
+
+<!ELEMENT weapons ((item*))>
+
+<!ELEMENT armor ((item*))>
+
+<!ELEMENT equipment ((item*))>
+
+<!ELEMENT item ((description, gearcost, availability, matrix?, weaponinfo?, armorinfo?, conditionmonitor?, modifications?, accessories?, ammunition?, programs?, othergear?))>
+<!ATTLIST item
+	dicepool CDATA #IMPLIED
+	essencecost CDATA #IMPLIED
+	name CDATA #REQUIRED
+	natural (yes | no) "no"
+	quantity CDATA #IMPLIED
+	rating CDATA #IMPLIED
+	useradded (yes | no) "yes"
+	size CDATA #IMPLIED
+	rfid CDATA #IMPLIED
+	wireless CDATA #IMPLIED
+>
+
+<!ELEMENT gearcost EMPTY>
+<!ATTLIST gearcost
+	text CDATA #IMPLIED
+	value CDATA #IMPLIED
+>
+
+<!ELEMENT availability EMPTY>
+<!ATTLIST availability
+	class CDATA #REQUIRED
+	text CDATA #REQUIRED
+	value CDATA #REQUIRED
+>
+
+<!ELEMENT matrix ((defense?, matrixattribute*))>
+<!ATTLIST matrix
+	armor CDATA #IMPLIED
+	dr CDATA #IMPLIED
+	initiative CDATA #IMPLIED
+>
+
+<!ELEMENT matrixattribute EMPTY>
+<!ATTLIST matrixattribute
+	name CDATA #REQUIRED
+	base CDATA #REQUIRED
+	modified CDATA #REQUIRED
+	text CDATA #REQUIRED
+>
+
+<!ELEMENT weaponinfo ((defense?, ammunitionused*, mode*, ranges?))>
+<!ATTLIST weaponinfo
+	ap CDATA #REQUIRED
+	damagetext CDATA #REQUIRED
+	damagetype CDATA #REQUIRED
+	damagevalue CDATA #REQUIRED
+	dicepool CDATA #REQUIRED
+	equipped CDATA #REQUIRED
+	grouptext CDATA #REQUIRED
+	isammunition CDATA #REQUIRED
+	modestext CDATA #REQUIRED
+	reach CDATA #IMPLIED
+	recoilcomp CDATA #IMPLIED
+	vsarmor CDATA #REQUIRED
+>
+
+<!ELEMENT ammunitionused EMPTY>
+<!ATTLIST ammunitionused
+	bins CDATA #REQUIRED
+	count CDATA #REQUIRED
+	text CDATA #REQUIRED
+	type CDATA #REQUIRED
+>
+
+<!ELEMENT mode (#PCDATA)>
+
+<!ELEMENT ranges ((range*))>
+<!ATTLIST ranges
+  text CDATA #REQUIRED
+>
+
+<!ELEMENT range EMPTY>
+<!ATTLIST range
+  name CDATA #REQUIRED
+	text CDATA #REQUIRED
+	value CDATA #REQUIRED
+>
+
+<!ELEMENT armorinfo EMPTY>
+<!ATTLIST armorinfo
+	acid CDATA #REQUIRED
+	ballistic CDATA #REQUIRED
+	cold CDATA #REQUIRED
+	electricity CDATA #REQUIRED
+	equipped (yes | no) "no"
+	falling CDATA #REQUIRED
+	fire CDATA #REQUIRED
+	impact CDATA #REQUIRED
+	laser CDATA #REQUIRED
+	radiation CDATA #REQUIRED
+>
+
+<!ELEMENT modifications ((item*))>
+
+<!ELEMENT accessories ((item*))>
+
+<!ELEMENT ammunition ((item*))>
+
+<!ELEMENT programs ((item*))>
+
+<!ELEMENT othergear ((item*))>
+
+<!ELEMENT identities ((identity*))>
+<!ELEMENT identity ((lifestyle*, subscription*, license*, description))>
+<!ATTLIST identity
+	name CDATA #REQUIRED
+>
+
+<!ELEMENT lifestyle ((gearcost))>
+<!ATTLIST lifestyle
+	months CDATA #REQUIRED
+	name CDATA #REQUIRED
+>
+
+<!ELEMENT subscription ((gearcost))>
+<!ATTLIST subscription
+	months CDATA #REQUIRED
+	name CDATA #REQUIRED
+>
+
+<!ELEMENT license ((gearcost))>
+<!ATTLIST license
+	name CDATA #REQUIRED
+	rating CDATA #REQUIRED
+	for CDATA #IMPLIED
+>
+
+<!ELEMENT contacts ((contact*))>
+<!ELEMENT contact ((description))>
+<!ATTLIST contact
+	connection CDATA #REQUIRED
+	loyalty CDATA #REQUIRED
+	name CDATA #REQUIRED
+	type CDATA #REQUIRED
+>
+
+<!ELEMENT ammotrackers ((ammotracker*))>
+<!ELEMENT ammotracker EMPTY>
+<!ATTLIST ammotracker
+	name CDATA #REQUIRED
+	text CDATA #REQUIRED
+>
+
+<!ELEMENT trackers ((tracker*))>
+<!ELEMENT tracker EMPTY>
+<!ATTLIST tracker
+	name CDATA #REQUIRED
+	text CDATA #REQUIRED
+	used CDATA #REQUIRED
+	left CDATA #REQUIRED
+	min CDATA #REQUIRED
+	max CDATA #REQUIRED
+>
+
+<!ELEMENT conditionmonitors ((conditionmonitor+))>
+<!ATTLIST conditionmonitors
+	totalpenalty CDATA #REQUIRED
+>
+
+<!ELEMENT conditionmonitor EMPTY>
+<!ATTLIST conditionmonitor
+	boxes CDATA #REQUIRED
+	name CDATA #REQUIRED
+	penalty CDATA #REQUIRED
+>
+
+<!ELEMENT journals ((journal*))>
+<!ELEMENT journal ((description))>
+<!ATTLIST journal
+	name CDATA #IMPLIED
+	cash CDATA #IMPLIED
+	gamedate CDATA #IMPLIED
+	realdate CDATA #IMPLIED
+	karma CDATA #IMPLIED
+	awareness CDATA #IMPLIED
+	notoriety CDATA #IMPLIED
+	streetcred CDATA #IMPLIED
+>
+
+<!ELEMENT images ((image*))>
+<!ELEMENT image EMPTY>
+<!ATTLIST image
+	filename CDATA #REQUIRED
+>
+
+<!ELEMENT validation ((report, validmessage*))>
+
+<!ELEMENT report (#PCDATA)>
+
+<!ELEMENT validmessage (#PCDATA)>
+
+<!ELEMENT settings EMPTY>
+<!ATTLIST settings
+	summary CDATA #REQUIRED
+>
+
+<!ELEMENT npc ((basics, tactics, ecology, additional))>
+<!ELEMENT basics ((npcinfo*))>
+<!ELEMENT tactics ((npcinfo*))>
+<!ELEMENT ecology ((npcinfo*))>
+<!ELEMENT additional ((npcinfo*))>
+<!ELEMENT npcinfo (#PCDATA)>
+<!ATTLIST npcinfo
+	name CDATA #REQUIRED
+>
+
+<!ELEMENT minions ((minion*))>
+<!ELEMENT minion ((spirit | sprite))>
+<!ATTLIST minion
+	name CDATA #REQUIRED
+	type (Sprite | Spirit) #REQUIRED
+>
+
+<!ELEMENT spirit EMPTY>
+<!ATTLIST spirit
+	bound (yes | no) #REQUIRED
+	force CDATA #REQUIRED
+	services CDATA #REQUIRED
+>
+
+<!ELEMENT sprite EMPTY>
+<!ATTLIST sprite
+	rating CDATA #REQUIRED
+	registered (yes | no) #REQUIRED
+	tasks CDATA #REQUIRED
+>
