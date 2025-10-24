@@ -1,16 +1,390 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  <script src="/bower_components/webcomponentsjs/webcomponents.min.js"></script>
-  <link rel="import" href="/bower_components/iron-signals/iron-signals.html" />
-  <link rel="import" href="/bower_components/iron-ajax/iron-ajax.html" />
-  <link rel="import" href="/bower_components/google-sheets/google-sheets.html" />
-  <link rel="import" href="/bower_components/google-chart/google-chart.html" />
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manchuwook - Projects Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<body>This is that thing that does the stuff
-  <a href="Matrix_Actions.html">Matrix Actions Worksheet</a>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .intro h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 2em;
+        }
+
+        .intro p {
+            color: #666;
+            font-size: 1.1em;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .project-card {
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .project-card h3 {
+            color: #333;
+            font-size: 1.4em;
+            margin-bottom: 5px;
+        }
+
+        .project-card h3 a {
+            color: #667eea;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .project-card h3 a:hover {
+            color: #764ba2;
+        }
+
+        .language-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #667eea;
+            color: white;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+        }
+
+        .language-badge.typescript {
+            background: #3178c6;
+        }
+
+        .language-badge.python {
+            background: #3776ab;
+        }
+
+        .language-badge.javascript {
+            background: #f7df1e;
+            color: #333;
+        }
+
+        .language-badge.css {
+            background: #264de4;
+        }
+
+        .project-description {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .project-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            font-size: 0.85em;
+            color: #888;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .license {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .license::before {
+            content: "⚖️";
+        }
+
+        .updated {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .updated::before {
+            content: "📅";
+        }
+
+        footer {
+            background: #f8f9fa;
+            padding: 30px;
+            text-align: center;
+            color: #666;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            header p {
+                font-size: 1em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .projects {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Manchuwook</h1>
+            <p>Developer & Creator</p>
+        </header>
+
+        <div class="content">
+            <div class="intro">
+                <h2>Public Projects</h2>
+                <p>Explore my collection of open-source projects spanning AI, music generation, game development, and web development tools.</p>
+            </div>
+
+            <div class="projects">
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3><a href="https://github.com/manchuwook/saga-abilities" target="_blank">saga-abilities</a></h3>
+                        <span class="language-badge typescript">TypeScript</span>
+                    </div>
+                    <p class="project-description">TypeScript library for managing abilities in the Saga system.</p>
+                    <div class="project-meta">
+                        <span class="updated">Oct 22, 2025</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3><a href="https://github.com/manchuwook/saga-spells" target="_blank">saga-spells</a></h3>
+                        <span class="language-badge typescript">TypeScript</span>
+                    </div>
+                    <p class="project-description">TypeScript library for managing spells in the Saga system.</p>
+                    <div class="project-meta">
+                        <span class="updated">Oct 21, 2025</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3><a href="https://github.com/manchuwook/reaper-pysong" target="_blank">reaper-pysong</a></h3>
+                        <span class="language-badge python">Python</span>
+                    </div>
+                    <p class="project-description">Scripts written in Python for Reaper to generate a template with composer FX.</p>
+                    <div class="project-meta">
+                        <span class="license">The Unlicense</span>
+                        <span class="updated">Aug 12, 2025</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3><a href="https://github.com/manchuwook/sage-calculate" target="_blank">sage-calculate</a></h3>
+                        <span class="language-badge typescript">TypeScript</span>
+                    </div>
+                    <p class="project-description">A pure functional TypeScript library for saga system calculations with validation.</p>
+                    <div class="project-meta">
+                        <span class="license">MIT License</span>
+                        <span class="updated">May 17, 2025</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3><a href="https://github.com/manchuwook/ComfyUI-Flux-TryOff" target="_blank">ComfyUI-Flux-TryOff</a></h3>
+                        <span class="language-badge python">Python</span>
+                    </div>
+                    <p class="project-description">This uses Flux and CatV2TON to enable 'Try-Off', e.g. segmenting clothing from models.</p>
+                    <div class="project-meta">
+                        <span class="license">MIT License</span>
+                        <span class="updated">Mar 10, 2025</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3><a href="https://github.com/manchuwook/magenta-studio" target="_blank">magenta-studio</a></h3>
+                        <span class="language-badge javascript">JavaScript</span>
+                    </div>
+                    <p class="project-description">Magenta Studio is a collection of music plugins built on Magenta's open source tools and models.</p>
+                    <div class="project-meta">
+                        <span class="license">Apache License 2.0</span>
+                        <span class="updated">Feb 19, 2025</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3><a href="https://github.com/manchuwook/manchuwook" target="_blank">manchuwook</a></h3>
+                    </div>
+                    <p class="project-description">My personal GitHub profile repository.</p>
+                    <div class="project-meta">
+                        <span class="updated">Feb 15, 2025</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3><a href="https://github.com/manchuwook/miniflare-typescript-plop-esbuild-jest" target="_blank">miniflare-typescript-plop-esbuild-jest</a></h3>
+                        <span class="language-badge typescript">TypeScript</span>
+                    </div>
+                    <p class="project-description">Example project using TypeScript, Plop, esbuild and Jest.</p>
+                    <div class="project-meta">
+                        <span class="updated">Jan 31, 2025</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3><a href="https://github.com/manchuwook/continue" target="_blank">continue</a></h3>
+                        <span class="language-badge typescript">TypeScript</span>
+                    </div>
+                    <p class="project-description">Continue is the leading open-source AI code assistant.</p>
+                    <div class="project-meta">
+                        <span class="license">Apache License 2.0</span>
+                        <span class="updated">Aug 23, 2024</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3><a href="https://github.com/manchuwook/hallo-webui" target="_blank">hallo-webui</a></h3>
+                        <span class="language-badge python">Python</span>
+                    </div>
+                    <p class="project-description">Webui for Hallo: Hierarchical Audio-Driven Visual Synthesis for Portrait Image Animation.</p>
+                    <div class="project-meta">
+                        <span class="updated">Jun 21, 2024</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3><a href="https://github.com/manchuwook/db-storage1111" target="_blank">db-storage1111</a></h3>
+                        <span class="language-badge python">Python</span>
+                    </div>
+                    <p class="project-description">automatic1111's stable-diffusion-webui extension for storing images to a database.</p>
+                    <div class="project-meta">
+                        <span class="updated">Oct 2, 2023</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3><a href="https://github.com/manchuwook/3d-dice" target="_blank">3d-dice</a></h3>
+                        <span class="language-badge javascript">JavaScript</span>
+                    </div>
+                    <p class="project-description">Created with CodeSandbox - A 3D dice roller project.</p>
+                    <div class="project-meta">
+                        <span class="updated">Jan 16, 2023</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3><a href="https://github.com/manchuwook/manchuwook.github.io" target="_blank">manchuwook.github.io</a></h3>
+                        <span class="language-badge css">CSS</span>
+                    </div>
+                    <p class="project-description">GitHub pages site for Manchuwook - this website!</p>
+                    <div class="project-meta">
+                        <span class="updated">Aug 3, 2022</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>View more on <a href="https://github.com/manchuwook" target="_blank">GitHub</a></p>
+            <p style="margin-top: 10px; font-size: 0.9em;">Last updated: October 2025</p>
+        </footer>
+    </div>
 </body>
-<h1>This site will be undergoing some changes soon.</h1>
 </html>
